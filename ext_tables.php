@@ -8,10 +8,14 @@
 if (!defined("TYPO3_MODE")) {
 	die ("Access denied.");
 }
+
+// Autoloader
+\HDNET\Autoloader\Loader::extTables('HDNET', 'cache_check');
+
 if (TYPO3_MODE === 'BE') {
-	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule('HDNET.' . $_EXTKEY, 'tools', 'CacheCheck', '', array('CacheCheck' => 'getCaches,list,startAnalyzing,stopAnalyzing'), array(
+	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule('HDNET.' . $_EXTKEY, 'tools', 'CacheCheck', '', array('CacheCheck' => 'list,start,stop'), array(
 		'access' => 'user,group',
-		'icon'   => 'EXT:cache_check/ext_icon.gif',
+		'icon'   => 'EXT:cache_check/ext_icon.png',
 		'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_mod.xml',
 	));
 }
