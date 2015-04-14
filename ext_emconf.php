@@ -17,7 +17,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'author_company' => 'hdnet.de',
 	'constraints'    => array(
 		'depends'   => array(
-			'typo3' => '6.2.0-6.2.99..0.0',
+			'typo3'      => '6.2.0-6.2.99',
+			'autoloader' => '1.5.6-1.5.99',
 		),
 		'conflicts' => array(),
 		'suggests'  => array(),

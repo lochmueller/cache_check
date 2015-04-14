@@ -9,6 +9,9 @@ if (!defined("TYPO3_MODE")) {
 	die ("Access denied.");
 }
 
+// Autoloader
+\HDNET\Autoloader\Loader::extLocalconf('HDNET', 'cache_check');
+
 /** @var \HDNET\CacheCheck\Service\CacheRegistry $cacheRegistry */
 $cacheRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\CacheRegistry');
 $cacheConfigurations = &$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
