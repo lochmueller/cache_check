@@ -55,6 +55,11 @@ class CacheRepository {
 	protected function mapCacheConfigurationIntoModel($cacheName, $configuration) {
 		$cache = new Cache();
 		$cache->setName($cacheName);
+		$cache->setFrontend(isset($configuration['frontend']) ? $configuration['frontend'] : 'TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend');
+		$cache->setBackend(isset($configuration['backend']) ? $configuration['backend'] : 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend');
+		$cache->setOriginalBackend(isset($configuration['originalBackend']) ? $configuration['originalBackend'] : '');
+		$cache->setOptions(isset($configuration['options']) ? $configuration['options'] : array());
+		$cache->setGroups(isset($configuration['groups']) ? $configuration['groups'] : array('all'));
 		return $cache;
 	}
 }

@@ -10,7 +10,6 @@ namespace HDNET\CacheCheck\Controller;
 use HDNET\CacheCheck\Domain\Model\Cache;
 use HDNET\Hdnet\Controller\AbstractController;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class CacheCheckController
@@ -36,14 +35,6 @@ class CacheCheckController extends AbstractController {
 	protected $cacheRepository;
 
 	/**
-	 * initialize action
-	 */
-	protected function initializeAction() {
-		parent::initializeAction();
-		$this->cacheRegistry = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\CacheRegistry');
-	}
-
-	/**
 	 * Assigns the given array to the view
 	 */
 	public function listAction() {
@@ -56,11 +47,11 @@ class CacheCheckController extends AbstractController {
 	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
 	 */
 	public function startAction(Cache $cache) {
-		if (!in_array($cache->getName(), $this->cacheRegistry->getCurrent())) {
+		if (!$cache->getIsInAnalyseMode()) {
 			$this->cacheRegistry->add($cache->getName());
 			$this->addFlashMessage('This cache "' . $cache->getName() . '" is now being analyzed');
 		} else {
-			$this->addFlashMessage('This cache "' . $cache->getName() . '" is already being analyzed', $messageTitle = '', $severity = AbstractMessage::WARNING);
+			$this->addFlashMessage('This cache "' . $cache->getName() . '" is already being analyzed', '', AbstractMessage::WARNING);
 		}
 		$this->redirect('list');
 	}
@@ -71,11 +62,11 @@ class CacheCheckController extends AbstractController {
 	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
 	 */
 	public function stopAction(Cache $cache) {
-		if (in_array($cache->getName(), $this->cacheRegistry->getCurrent())) {
+		if ($cache->getIsInAnalyseMode()) {
 			$this->cacheRegistry->remove($cache->getName());
 			$this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed anymore.');
 		} else {
-			$this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed', $messageTitle = '', $severity = AbstractMessage::WARNING);
+			$this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed', '', AbstractMessage::WARNING);
 		}
 		$this->redirect('list');
 	}
