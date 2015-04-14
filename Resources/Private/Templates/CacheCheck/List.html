@@ -1,0 +1,31 @@
+<f:layout name="Backend" />
+
+<f:section name="content">
+	<f:flashMessages />
+	<f:for each="{caches}" as="cache" key="key">
+
+		<div style="border: 1px solid red;">
+			Cache: {key}<br /> Frontend: {cache.frontend}<br /> Backend: {cache.backend}
+			<f:if condition="{cache.originalBackend = TRUE}">
+				<br /> Original Backend: {cache.originalBackend}
+			</f:if>
+			<br />
+			<f:for each="{cache.groups}" as="group">
+				Gruppe: {group}<br />
+			</f:for>
+			<f:for each="{cache.options}" as="option" key="optionKey">
+				Option: {optionKey} = {option}<br />
+			</f:for>
+
+			<f:form action="startAnalyzing" name="startButton">
+				<f:form.hidden name="cacheName" value="{key}" />
+				<f:form.submit value="Start" />
+			</f:form>
+
+			<f:form action="stopAnalyzing" name="stopButton">
+				<f:form.hidden name="cacheName" value="{key}" />
+				<f:form.submit value="Stop" />
+			</f:form>
+		</div>
+	</f:for>
+</f:section>
