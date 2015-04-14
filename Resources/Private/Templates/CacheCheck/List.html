@@ -21,12 +21,12 @@
 					Option: {optionKey} = {option}<br />
 				</f:for>
 
-				<f:form action="startAnalyzing" name="startButton">
+				<f:form action="start" name="startButton">
 					<f:form.hidden name="cacheName" value="{key}" />
 					<f:form.submit value="Start" class="btn btn-primary" />
 				</f:form>
 
-				<f:form action="stopAnalyzing" name="stopButton">
+				<f:form action="stop" name="stopButton">
 					<f:form.hidden name="cacheName" value="{key}" />
 					<f:form.submit value="Stop" class="btn btn-primary" />
 				</f:form>

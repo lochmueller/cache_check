@@ -9,9 +9,12 @@ namespace HDNET\CacheCheck\Controller;
 
 use HDNET\Hdnet\Controller\AbstractController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
-
+/**
+ * Class CacheCheckController
+ *
+ * @package HDNET\CacheCheck\Controller
+ */
 class CacheCheckController extends AbstractController {
 
 	/**
@@ -31,22 +34,12 @@ class CacheCheckController extends AbstractController {
 	}
 
 	/**
-	 * Retrieves array of configured caches.
-	 *
+	 * Assigns the given array to the view
 	 */
-	public function getCachesAction() {
+	public function listAction() {
 		$caches = $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
 		$caches = array_reverse($caches);
 
-		$this->forward('list', NULL, NULL, array('caches' => $caches)); // URL too large when using redirect
-	}
-
-	/**
-	 * Assigns the given array to the view
-	 *
-	 * @param array $caches Contains all installed caches and their configuration.
-	 */
-	public function listAction($caches) {
 		$this->view->assign('caches', $caches);
 	}
 
@@ -55,14 +48,14 @@ class CacheCheckController extends AbstractController {
 	 *
 	 * @param string $cacheName
 	 */
-	public function startAnalyzingAction($cacheName) {
+	public function startAction($cacheName) {
 		if (!in_array($cacheName, $this->cacheRegistry->getCurrent())) {
 			$this->cacheRegistry->add($cacheName);
 			$this->addFlashMessage('This cache "' . $cacheName . '" is now being analyzed');
 		} else {
 			$this->addFlashMessage('This cache "' . $cacheName . '" is already being analyzed', $messageTitle = '', $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
 		}
-		$this->redirect('getCaches');
+		$this->redirect('list');
 	}
 
 	/**
@@ -70,13 +63,13 @@ class CacheCheckController extends AbstractController {
 	 *
 	 * @param string $cacheName
 	 */
-	public function stopAnalyzingAction($cacheName) {
+	public function stopAction($cacheName) {
 		if (in_array($cacheName, $this->cacheRegistry->getCurrent())) {
 			$this->cacheRegistry->remove($cacheName);
 			$this->addFlashMessage('This cache "' . $cacheName . '" is not being analyzed anymore.');
 		} else {
 			$this->addFlashMessage('This cache "' . $cacheName . '" is not being analyzed', $messageTitle = '', $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
 		}
-		$this->redirect('getCaches');
+		$this->redirect('list');
 	}
 }
