@@ -70,4 +70,17 @@ class CacheCheckController extends AbstractController {
 		}
 		$this->redirect('list');
 	}
+
+	/**
+	 * Action to stop a cache analysis
+	 *
+	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
+	 */
+	public function deleteAction(Cache $cache) {
+
+		// @todo delete
+
+		$this->addFlashMessage('This cache "' . $cache->getName() . '" information are removed from log');
+		$this->redirect('list');
+	}
 }

@@ -8,6 +8,8 @@
 
 namespace HDNET\CacheCheck\Domain\Model;
 
+use HDNET\CacheCheck\Service\KeyPerformanceIndicator;
+
 /**
  * Cache
  *
@@ -157,5 +159,25 @@ class Cache {
 	 */
 	public function getIsInAnalyseMode() {
 		return trim($this->getOriginalBackend()) !== '';
+	}
+
+	/**
+	 * get static KPI
+	 *
+	 * @return array
+	 */
+	public function getStaticKpi() {
+		return KeyPerformanceIndicator::getInstance()
+			->getStatic($this);
+	}
+
+	/**
+	 * get dynamic KPI
+	 *
+	 * @return array
+	 */
+	public function getDynamicKpi() {
+		return KeyPerformanceIndicator::getInstance()
+			->getDynamic($this);
 	}
 }
