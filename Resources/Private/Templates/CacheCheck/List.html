@@ -23,6 +23,19 @@
 						</f:for>
 					</div>
 					<div class="col-md-8">
+						<ul>
+							<f:for each="{cache.staticKpi}" key="key" as="val">
+								<li>{key}: {val}</li>
+							</f:for>
+						</ul>
+						<f:if condition="{cache.dynamicKpi}">
+							<ul>
+								<f:for each="{cache.dynamicKpi}" key="key" as="val">
+									<li>{key}: {val}</li>
+								</f:for>
+							</ul>
+						</f:if>
+
 						<f:if condition="{cache.isInAnalyseMode}">
 							<f:then>
 								<f:form action="stop" name="stopButton">
@@ -36,6 +49,13 @@
 									<f:form.submit value="Start" class="btn btn-info" />
 								</f:form>
 							</f:else>
+						</f:if>
+
+						<f:if condition="{cache.dynamicKpi}">
+							<f:form action="delete" name="startButton">
+								<f:form.hidden name="cache" value="{cache}" />
+								<f:form.submit value="Delete log" class="btn btn-info" />
+							</f:form>
 						</f:if>
 					</div>
 				</div>
