@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for the "Cache-Check" BE Module</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="mlang_tabs_tab">Cache-Check</label>
+			<label index="mlang_labels_tablabel">Cache-Analyzer</label>
+			<label index="mlang_labels_tabdescr">Module for an analysis of installed caches.</label>
+		</languageKey>
+
+		<languageKey index="de" type="array">
+			<label index="mlang_tabs_tab">Cache-Check</label>
+			<label index="mlang_labels_tablabel">Cache-Analyzer</label>
+			<label index="mlang_labels_tabdescr">Module for an analysis of installed caches.</label>
+		</languageKey>
+	</data>
+</T3locallang>
