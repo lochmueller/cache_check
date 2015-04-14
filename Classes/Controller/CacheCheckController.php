@@ -7,7 +7,9 @@
 
 namespace HDNET\CacheCheck\Controller;
 
+use HDNET\CacheCheck\Domain\Model\Cache;
 use HDNET\Hdnet\Controller\AbstractController;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -26,6 +28,14 @@ class CacheCheckController extends AbstractController {
 	protected $cacheRegistry;
 
 	/**
+	 * Cache repository
+	 *
+	 * @var \HDNET\CacheCheck\Domain\Repository\CacheRepository
+	 * @inject
+	 */
+	protected $cacheRepository;
+
+	/**
 	 * initialize action
 	 */
 	protected function initializeAction() {
@@ -37,23 +47,20 @@ class CacheCheckController extends AbstractController {
 	 * Assigns the given array to the view
 	 */
 	public function listAction() {
-		$caches = $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
-		$caches = array_reverse($caches);
-
-		$this->view->assign('caches', $caches);
+		$this->view->assign('caches', $this->cacheRepository->findAll());
 	}
 
 	/**
 	 * action to start a cache analysis
 	 *
-	 * @param string $cacheName
+	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
 	 */
-	public function startAction($cacheName) {
-		if (!in_array($cacheName, $this->cacheRegistry->getCurrent())) {
-			$this->cacheRegistry->add($cacheName);
-			$this->addFlashMessage('This cache "' . $cacheName . '" is now being analyzed');
+	public function startAction(Cache $cache) {
+		if (!in_array($cache->getName(), $this->cacheRegistry->getCurrent())) {
+			$this->cacheRegistry->add($cache->getName());
+			$this->addFlashMessage('This cache "' . $cache->getName() . '" is now being analyzed');
 		} else {
-			$this->addFlashMessage('This cache "' . $cacheName . '" is already being analyzed', $messageTitle = '', $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+			$this->addFlashMessage('This cache "' . $cache->getName() . '" is already being analyzed', $messageTitle = '', $severity = AbstractMessage::WARNING);
 		}
 		$this->redirect('list');
 	}
@@ -61,14 +68,14 @@ class CacheCheckController extends AbstractController {
 	/**
 	 * Action to stop a cache analysis
 	 *
-	 * @param string $cacheName
+	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
 	 */
-	public function stopAction($cacheName) {
-		if (in_array($cacheName, $this->cacheRegistry->getCurrent())) {
-			$this->cacheRegistry->remove($cacheName);
-			$this->addFlashMessage('This cache "' . $cacheName . '" is not being analyzed anymore.');
+	public function stopAction(Cache $cache) {
+		if (in_array($cache->getName(), $this->cacheRegistry->getCurrent())) {
+			$this->cacheRegistry->remove($cache->getName());
+			$this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed anymore.');
 		} else {
-			$this->addFlashMessage('This cache "' . $cacheName . '" is not being analyzed', $messageTitle = '', $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+			$this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed', $messageTitle = '', $severity = AbstractMessage::WARNING);
 		}
 		$this->redirect('list');
 	}

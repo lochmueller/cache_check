@@ -2,11 +2,10 @@
 
 <f:section name="content">
 	<f:flashMessages />
-	<f:for each="{caches}" as="cache" key="key">
-
+	<f:for each="{caches}" as="cache">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">{key}</h3>
+				<h3 class="panel-title">{cache.name}</h3>
 			</div>
 			<div class="panel-body">
 				Frontend: {cache.frontend}<br /> Backend: {cache.backend}
@@ -22,12 +21,12 @@
 				</f:for>
 
 				<f:form action="start" name="startButton">
-					<f:form.hidden name="cacheName" value="{key}" />
+					<f:form.hidden name="cache" value="{cache}" />
 					<f:form.submit value="Start" class="btn btn-primary" />
 				</f:form>
 
 				<f:form action="stop" name="stopButton">
-					<f:form.hidden name="cacheName" value="{key}" />
+					<f:form.hidden name="cache" value="{cache}" />
 					<f:form.submit value="Stop" class="btn btn-primary" />
 				</f:form>
 			</div>
