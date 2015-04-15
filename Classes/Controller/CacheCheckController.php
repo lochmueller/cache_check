@@ -9,15 +9,15 @@
 namespace HDNET\CacheCheck\Controller;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
-use HDNET\Hdnet\Controller\AbstractController;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
  * Class CacheCheckController
  */
-class CacheCheckController extends AbstractController {
+class CacheCheckController extends ActionController {
 
 	/**
 	 * Cache registry
