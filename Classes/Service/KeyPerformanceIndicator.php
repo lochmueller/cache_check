@@ -69,24 +69,36 @@ class KeyPerformanceIndicator implements SingletonInterface {
 	 */
 	public function getDynamic(Cache $cache) {
 		$databaseConnection = $this->getDatabaseConnection();
-		if ($databaseConnection->exec_SELECTcountRows('*', 'tx_cachecheck_domain_model_log', 'cache_name = "' . $cache->getName() . '"') <= 0) {
+		$where = 'cache_name = "' . $cache->getName() . '"';
+		$table = 'tx_cachecheck_domain_model_log';
+		if ($databaseConnection->exec_SELECTcountRows('*', $table, $where) <= 0) {
 			return FALSE;
 		}
+
+		$startTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp ASC');
+		$startTime = (int)($startTime['timestamp'] / 1000);
+		$endTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp DESC');
+		$endTime = (int)($endTime['timestamp'] / 1000);
+		$minutes = ($endTime - $startTime) / 60;
+
+		$countHas = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
+		$countGet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
+		$countSet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
 
 		// @todo implement
 
 		$kpi = array(
-			'startTime'            => '',
+			'startTime'            => date('d.m.Y H:i:s', $startTime),
 			'averageCreateTime'    => 0,
 			'averageSelectionTime' => 0,
 			'averageLivetime'      => 0,
 			'hitRate'              => '',
 			'missRate'             => '',
-			'hasPerMinute'         => '',
-			'getPerMinute'         => '',
-			'setPerMinute'         => '',
-			'endTime'              => '',
-			'logTime'              => '',
+			'hasPerMinute'         => $countHas / $minutes,
+			'getPerMinute'         => $countGet / $minutes,
+			'setPerMinute'         => $countSet / $minutes,
+			'endTime'              => date('d.m.Y H:i:s', $endTime),
+			'logTime'              => $minutes . ' minutes',
 		);
 
 		return $kpi;
