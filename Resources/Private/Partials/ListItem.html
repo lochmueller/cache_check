@@ -1,0 +1,58 @@
+<div class="panel {f:if(condition: cache.isInAnalyseMode, then: 'panel-danger', else: 'panel-default')}">
+	<div class="panel-heading">
+		<h3 class="panel-title">{cache.name}</h3>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4">
+				Frontend: {cache.frontend}<br /> Backend: {cache.backend}
+				<f:if condition="{cache.originalBackend = TRUE}">
+					<br /> Original Backend: {cache.originalBackend}
+				</f:if>
+				<br />
+				<f:for each="{cache.groups}" as="group">
+					Gruppe: {group}<br />
+				</f:for>
+				<f:for each="{cache.options}" as="option" key="optionKey">
+					Option: {optionKey} = {option}<br />
+				</f:for>
+			</div>
+			<div class="col-md-8">
+				<ul>
+					<f:for each="{cache.staticKpi}" key="key" as="val">
+						<li>{key}: {val}</li>
+					</f:for>
+				</ul>
+				<f:if condition="{cache.dynamicKpi}">
+					<ul>
+						<f:for each="{cache.dynamicKpi}" key="key" as="val">
+							<li>{key}: {val}</li>
+						</f:for>
+					</ul>
+				</f:if>
+
+				<f:if condition="{cache.isInAnalyseMode}">
+					<f:then>
+						<f:form action="stop" name="stopButton">
+							<f:form.hidden name="cache" value="{cache}" />
+							<f:form.submit value="Stop" class="btn btn-success" />
+						</f:form>
+					</f:then>
+					<f:else>
+						<f:form action="start" name="startButton">
+							<f:form.hidden name="cache" value="{cache}" />
+							<f:form.submit value="Start" class="btn btn-info" />
+						</f:form>
+					</f:else>
+				</f:if>
+
+				<f:if condition="{cache.dynamicKpi}">
+					<f:form action="delete" name="startButton">
+						<f:form.hidden name="cache" value="{cache}" />
+						<f:form.submit value="Delete log" class="btn btn-info" />
+					</f:form>
+				</f:if>
+			</div>
+		</div>
+	</div>
+</div>
