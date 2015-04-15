@@ -180,4 +180,16 @@ class Cache {
 		return KeyPerformanceIndicator::getInstance()
 			->getDynamic($this);
 	}
+
+	/**
+	 * Get the real backend information
+	 *
+	 * @return string
+	 */
+	public function getRealBackend() {
+		if (trim($this->getOriginalBackend()) !== '') {
+			return $this->getOriginalBackend();
+		}
+		return $this->getBackend();
+	}
 }

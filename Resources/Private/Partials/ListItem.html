@@ -1,6 +1,46 @@
 <div class="panel {f:if(condition: cache.isInAnalyseMode, then: 'panel-danger', else: 'panel-default')}">
 	<div class="panel-heading">
-		<h3 class="panel-title">{cache.name}</h3>
+		<div class="row">
+			<div class="col-md-4">
+				<h2 class="panel-title">
+					{cache.name}
+				</h2>
+			</div>
+			<div class="col-md-8">
+				<f:form action="flush" style="margin-bottom:0px; float: left; margin-right: 5px;">
+					<f:form.hidden name="cache" value="{cache}" />
+					<button type="submit" class="btn btn-warning" aria-label="Delete log">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Flush cache
+					</button>
+				</f:form>
+				<f:if condition="{cache.isInAnalyseMode}">
+					<f:then>
+						<f:form action="stop" style="margin-bottom:0px; float: left; margin-right: 5px;">
+							<f:form.hidden name="cache" value="{cache}" />
+							<button type="submit" class="btn btn-success" aria-label="Stop">
+								<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop
+							</button>
+						</f:form>
+					</f:then>
+					<f:else>
+						<f:form action="start" style="margin-bottom:0px; float: left; margin-right: 5px;">
+							<f:form.hidden name="cache" value="{cache}" />
+							<button type="submit" class="btn btn-warning" aria-label="Start">
+								<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start
+							</button>
+						</f:form>
+					</f:else>
+				</f:if>
+				<f:if condition="{cache.dynamicKpi}">
+					<f:form action="delete" style="margin-bottom:0px; float: left; margin-right: 5px;">
+						<f:form.hidden name="cache" value="{cache}" />
+						<button type="submit" class="btn btn-info" aria-label="Delete log">
+							<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete log
+						</button>
+					</f:form>
+				</f:if>
+			</div>
+		</div>
 	</div>
 	<div class="panel-body">
 		<div class="row">
@@ -17,31 +57,11 @@
 					Option: {optionKey} = {option}<br />
 				</f:for>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-4">
 				<f:render partial="Stats" arguments="{stats: cache.staticKpi}" />
+			</div>
+			<div class="col-md-4">
 				<f:render partial="Stats" arguments="{stats: cache.dynamicKpi}" />
-
-				<f:if condition="{cache.isInAnalyseMode}">
-					<f:then>
-						<f:form action="stop" name="stopButton">
-							<f:form.hidden name="cache" value="{cache}" />
-							<f:form.submit value="Stop" class="btn btn-success" />
-						</f:form>
-					</f:then>
-					<f:else>
-						<f:form action="start" name="startButton">
-							<f:form.hidden name="cache" value="{cache}" />
-							<f:form.submit value="Start" class="btn btn-info" />
-						</f:form>
-					</f:else>
-				</f:if>
-
-				<f:if condition="{cache.dynamicKpi}">
-					<f:form action="delete" name="startButton">
-						<f:form.hidden name="cache" value="{cache}" />
-						<f:form.submit value="Delete log" class="btn btn-info" />
-					</f:form>
-				</f:if>
 			</div>
 		</div>
 	</div>
