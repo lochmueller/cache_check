@@ -79,6 +79,7 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 		if (!$this->originalBackend instanceof \TYPO3\CMS\Core\Cache\Backend\BackendInterface) {
 			throw new \TYPO3\CMS\Core\Cache\Exception\InvalidBackendException('"' . $backendObjectName . '" is not a valid cache backend object.', 1216304301);
 		}
+		$this->originalBackend->setCache($cache);
 	}
 
 	/**
