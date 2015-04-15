@@ -9,9 +9,12 @@
 namespace HDNET\CacheCheck\Cache\Backend;
 
 use TYPO3\CMS\Core\Cache\Backend\AbstractBackend;
+use TYPO3\CMS\Core\Cache\Backend\BackendInterface;
 use TYPO3\CMS\Core\Cache\Backend\FreezableBackendInterface;
 use TYPO3\CMS\Core\Cache\Backend\PhpCapableBackendInterface;
 use TYPO3\CMS\Core\Cache\Backend\TaggableBackendInterface;
+use TYPO3\CMS\Core\Cache\Exception\InvalidBackendException;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -19,14 +22,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Class CacheAnalyzerBackend
  */
 class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendInterface, PhpCapableBackendInterface, TaggableBackendInterface {
-
-	/**
-	 * Cache repository
-	 *
-	 * @var \HDNET\CacheCheck\Domain\Repository\CacheRepository
-	 * @inject
-	 */
-	protected $cacheRepository;
 
 	/**
 	 * Original Backend
@@ -43,13 +38,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	protected $options;
 
 	/**
-	 * Request hash
-	 *
-	 * @var string
-	 */
-	static protected $requestHash;
-
-	/**
 	 * Build up the object
 	 *
 	 * @param string $context
@@ -63,21 +51,21 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	/**
 	 * Set the cache and init the original backend
 	 *
-	 * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cache
+	 * @param FrontendInterface $cache
 	 *
-	 * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidBackendException
+	 * @throws InvalidBackendException
 	 */
-	public function setCache(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cache) {
+	public function setCache(FrontendInterface $cache) {
 		parent::setCache($cache);
 
-		// @todo remove line
-		$this->cacheRepository = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Domain\\Repository\\CacheRepository');
-		$cacheObject = $this->cacheRepository->findByName($this->cacheIdentifier);
+		/** @var \HDNET\CacheCheck\Domain\Repository\CacheRepository $cacheRepository */
+		$cacheRepository = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Domain\\Repository\\CacheRepository');
+		$cacheObject = $cacheRepository->findByName($this->cacheIdentifier);
 
 		$backendObjectName = '\\' . ltrim($cacheObject->getOriginalBackend(), '\\');
 		$this->originalBackend = new $backendObjectName($this->context, $this->options);
-		if (!$this->originalBackend instanceof \TYPO3\CMS\Core\Cache\Backend\BackendInterface) {
-			throw new \TYPO3\CMS\Core\Cache\Exception\InvalidBackendException('"' . $backendObjectName . '" is not a valid cache backend object.', 1216304301);
+		if (!$this->originalBackend instanceof BackendInterface) {
+			throw new InvalidBackendException('"' . $backendObjectName . '" is not a valid cache backend object.', 1216304301);
 		}
 		$this->originalBackend->setCache($cache);
 	}
@@ -92,21 +80,20 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @internal param string $entrySize
 	 */
 	protected function logEntry($calledMethod, $entryIdentifier = '', $data = '') {
-		if (!isset(self::$requestHash)) {
-			self::$requestHash = uniqid();
+		static $requestHash = NULL;
+		if ($requestHash === NULL) {
+			$requestHash = uniqid();
 		}
-		$tableName = 'tx_cachecheck_domain_model_log';
 		$fieldsValues = array(
 			'timestamp'        => GeneralUtility::milliseconds(),
-			'request_hash'     => self::$requestHash,
+			'request_hash'     => $requestHash,
 			'cache_name'       => $this->cacheIdentifier,
 			'called_method'    => $calledMethod,
 			'entry_identifier' => $entryIdentifier,
 			'entry_size'       => strlen($data),
 		);
-
 		$this->getDatabaseConnection()
-			->exec_INSERTquery($tableName, $fieldsValues);
+			->exec_INSERTquery('tx_cachecheck_domain_model_log', $fieldsValues);
 	}
 
 	/**
@@ -206,7 +193,8 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @api
 	 */
 	public function collectGarbage() {
-		// TODO: Implement collectGarbage() method.
+		$this->logEntry('collectGarbage');
+		$this->originalBackend->collectGarbage();
 	}
 
 	/**
@@ -222,11 +210,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @return void
 	 */
 	public function freeze() {
-		$this->logEntry('freeze');
 		if (is_callable(array(
 			$this->originalBackend,
 			'freeze'
 		))) {
+			$this->logEntry('freeze');
 			$this->originalBackend->freeze();
 		}
 	}
@@ -237,11 +225,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @return boolean
 	 */
 	public function isFrozen() {
-		$this->logEntry('isFrozen');
 		if (is_callable(array(
 			$this->originalBackend,
 			'isFrozen'
 		))) {
+			$this->logEntry('isFrozen');
 			return $this->originalBackend->isFrozen();
 		}
 		return FALSE;
@@ -256,11 +244,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @api
 	 */
 	public function requireOnce($entryIdentifier) {
-		$this->logEntry('requireOnce', $entryIdentifier);
 		if (is_callable(array(
 			$this->originalBackend,
 			'requireOnce'
 		))) {
+			$this->logEntry('requireOnce', $entryIdentifier);
 			return $this->originalBackend->requireOnce($entryIdentifier);
 		}
 		return FALSE;
@@ -275,11 +263,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @api
 	 */
 	public function flushByTag($tag) {
-		$this->logEntry('flushByTag');
 		if (is_callable(array(
 			$this->originalBackend,
 			'flushByTag'
 		))) {
+			$this->logEntry('flushByTag');
 			$this->originalBackend->flushByTag();
 		}
 	}
@@ -294,11 +282,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @api
 	 */
 	public function findIdentifiersByTag($tag) {
-		$this->logEntry('findIdentifiersByTag');
 		if (is_callable(array(
 			$this->originalBackend,
 			'findIdentifiersByTag'
 		))) {
+			$this->logEntry('findIdentifiersByTag');
 			return $this->originalBackend->findIdentifiersByTag();
 		}
 		return array();
