@@ -2,7 +2,7 @@
 /**
  * Convert the cache name into the model
  *
- * @package Hdnet
+ * @package CacheCheck\Property\TypeConverter
  * @author  Tim Lochmüller
  */
 

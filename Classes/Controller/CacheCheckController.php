@@ -2,7 +2,8 @@
 /**
  * Controller of the CacheCheck Module
  *
- * @author Julian Seitz <julian.seitz@hdnet.de
+ * @package CacheCheck\Controller
+ * @author  Julian Seitz
  */
 
 namespace HDNET\CacheCheck\Controller;
@@ -15,8 +16,6 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 
 /**
  * Class CacheCheckController
- *
- * @package HDNET\CacheCheck\Controller
  */
 class CacheCheckController extends AbstractController {
 

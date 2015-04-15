@@ -10,7 +10,6 @@ namespace HDNET\CacheCheck\Service;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -18,7 +17,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @author Tim Lochmüller
  */
-class KeyPerformanceIndicator implements SingletonInterface {
+class KeyPerformanceIndicator extends AbstractService {
 
 	/**
 	 * Get the current instance
@@ -30,6 +29,8 @@ class KeyPerformanceIndicator implements SingletonInterface {
 	}
 
 	/**
+	 * Get static cache information
+	 *
 	 * @param Cache $cache
 	 *
 	 * @return array
@@ -63,6 +64,8 @@ class KeyPerformanceIndicator implements SingletonInterface {
 	}
 
 	/**
+	 * Get dynamic cache information
+	 *
 	 * @param Cache $cache
 	 *
 	 * @return array

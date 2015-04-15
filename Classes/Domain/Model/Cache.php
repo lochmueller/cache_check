@@ -2,7 +2,7 @@
 /**
  * Cache
  *
- * @package Hdnet
+ * @package CacheCheck\Domain\Model
  * @author  Tim Lochmüller
  */
 
@@ -69,6 +69,8 @@ class Cache {
 	}
 
 	/**
+	 * Get name
+	 *
 	 * @return string
 	 */
 	public function getName() {
@@ -76,6 +78,8 @@ class Cache {
 	}
 
 	/**
+	 * Set name
+	 *
 	 * @param string $name
 	 */
 	public function setName($name) {
