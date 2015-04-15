@@ -9,6 +9,7 @@
 namespace HDNET\CacheCheck\Service;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use HDNET\CacheCheck\Service\Statistics\StatisticsInterface;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -37,30 +38,24 @@ class KeyPerformanceIndicator extends AbstractService {
 	 * @todo implement in general for all backends
 	 */
 	public function getStatic(Cache $cache) {
-		if ($cache->getRealBackend() !== 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend') {
+		$backendParts = GeneralUtility::trimExplode('\\', $cache->getRealBackend(), TRUE);
+		$statsBackend = 'HDNET\\CacheCheck\\Service\\Statistics\\' . $backendParts[sizeof($backendParts) - 1];
+
+		if (!class_exists($statsBackend)) {
 			return FALSE;
 		}
+		/** @var StatisticsInterface $statsBackendObject */
+		$statsBackendObject = GeneralUtility::makeInstance($statsBackend);
 
-		$databaseConnection = $this->getDatabaseConnection();
-		$cacheTable = 'cf_' . $cache->getName();
-		$tagsTable = 'cf_' . $cache->getName() . '_tags';
-
-		$entryCount = $databaseConnection->exec_SELECTcountRows('*', $cacheTable, '1=1');
-
-		$size = 0;
-		if ($entryCount > 0) {
-			$query = $databaseConnection->admin_query('SELECT ((data_length + index_length) / 1024 / 1024) "size" FROM information_schema.TABLES WHERE table_schema = "' . $GLOBALS['TYPO3_CONF_VARS']['DB']['database'] . '" AND table_name = "' . $cacheTable . '"');
-			$info = $databaseConnection->sql_fetch_assoc($query);
-			$size = $info['size'];
-		}
-		$kpi = array(
+		$size = $statsBackendObject->getSize($cache);
+		$entryCount = $statsBackendObject->countEntries($cache);
+		$tagCount = $statsBackendObject->countTags($cache);
+		return array(
 			'cacheEntriesCount'  => $entryCount,
-			'allEntrySizeMb'     => $size,
-			'averageEntrySizeMb' => $entryCount === 0 ? 0 : $size / $entryCount,
-			'differentTagsCount' => $databaseConnection->exec_SELECTcountRows('DISTINCT tag', $tagsTable, '1=1'),
+			'allEntrySizeByte'     => $size,
+			'averageEntrySizeByte' => $entryCount === 0 ? 0 : $size / $entryCount,
+			'differentTagsCount' => $tagCount,
 		);
-
-		return $kpi;
 	}
 
 	/**
