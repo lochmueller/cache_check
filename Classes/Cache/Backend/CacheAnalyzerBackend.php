@@ -111,7 +111,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @param boolean $useCompression
 	 *
 	 * @return void
-	 * @api
 	 */
 	protected function setCompression($useCompression) {
 	}
@@ -127,7 +126,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @return void
 	 * @throws \TYPO3\CMS\Core\Cache\Exception if no cache frontend has been set.
 	 * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidDataException if the data is not a string
-	 * @api
 	 */
 	public function set($entryIdentifier, $data, array $tags = array(), $lifetime = NULL) {
 		$this->logEntry('set', $entryIdentifier, $data);
@@ -140,7 +138,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @param string $entryIdentifier An identifier which describes the cache entry to load
 	 *
 	 * @return mixed The cache entry's content as a string or FALSE if the cache entry could not be loaded
-	 * @api
 	 */
 	public function get($entryIdentifier) {
 		$this->logEntry('get', $entryIdentifier);
@@ -153,7 +150,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @param string $entryIdentifier An identifier specifying the cache entry
 	 *
 	 * @return boolean TRUE if such an entry exists, FALSE if not
-	 * @api
 	 */
 	public function has($entryIdentifier) {
 		$this->logEntry('has', $entryIdentifier);
@@ -168,7 +164,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @param string $entryIdentifier Specifies the cache entry to remove
 	 *
 	 * @return boolean TRUE if (at least) an entry could be removed or FALSE if no entry was found
-	 * @api
 	 */
 	public function remove($entryIdentifier) {
 		$this->logEntry('remove', $entryIdentifier);
@@ -179,7 +174,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * Removes all cache entries of this cache.
 	 *
 	 * @return void
-	 * @api
 	 */
 	public function flush() {
 		$this->logEntry('flush');
@@ -190,7 +184,6 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * Does garbage collection
 	 *
 	 * @return void
-	 * @api
 	 */
 	public function collectGarbage() {
 		$this->logEntry('collectGarbage');
@@ -210,10 +203,7 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @return void
 	 */
 	public function freeze() {
-		if (is_callable(array(
-			$this->originalBackend,
-			'freeze'
-		))) {
+		if ($this->originalBackend instanceof FreezableBackendInterface) {
 			$this->logEntry('freeze');
 			$this->originalBackend->freeze();
 		}
@@ -225,10 +215,7 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @return boolean
 	 */
 	public function isFrozen() {
-		if (is_callable(array(
-			$this->originalBackend,
-			'isFrozen'
-		))) {
+		if ($this->originalBackend instanceof FreezableBackendInterface) {
 			$this->logEntry('isFrozen');
 			return $this->originalBackend->isFrozen();
 		}
@@ -241,13 +228,9 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @param string $entryIdentifier An identifier which describes the cache entry to load
 	 *
 	 * @return mixed Potential return value from the include operation
-	 * @api
 	 */
 	public function requireOnce($entryIdentifier) {
-		if (is_callable(array(
-			$this->originalBackend,
-			'requireOnce'
-		))) {
+		if ($this->originalBackend instanceof PhpCapableBackendInterface) {
 			$this->logEntry('requireOnce', $entryIdentifier);
 			return $this->originalBackend->requireOnce($entryIdentifier);
 		}
@@ -260,15 +243,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @param string $tag The tag the entries must have
 	 *
 	 * @return void
-	 * @api
 	 */
 	public function flushByTag($tag) {
-		if (is_callable(array(
-			$this->originalBackend,
-			'flushByTag'
-		))) {
+		if ($this->originalBackend instanceof TaggableBackendInterface) {
 			$this->logEntry('flushByTag');
-			$this->originalBackend->flushByTag();
+			$this->originalBackend->flushByTag($tag);
 		}
 	}
 
@@ -279,15 +258,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 * @param string $tag The tag to search for
 	 *
 	 * @return array An array with identifiers of all matching entries. An empty array if no entries matched
-	 * @api
 	 */
 	public function findIdentifiersByTag($tag) {
-		if (is_callable(array(
-			$this->originalBackend,
-			'findIdentifiersByTag'
-		))) {
+		if ($this->originalBackend instanceof TaggableBackendInterface) {
 			$this->logEntry('findIdentifiersByTag');
-			return $this->originalBackend->findIdentifiersByTag();
+			return $this->originalBackend->findIdentifiersByTag($tag);
 		}
 		return array();
 	}
