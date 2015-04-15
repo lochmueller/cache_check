@@ -18,18 +18,8 @@
 				</f:for>
 			</div>
 			<div class="col-md-8">
-				<ul>
-					<f:for each="{cache.staticKpi}" key="key" as="val">
-						<li>{key}: {val}</li>
-					</f:for>
-				</ul>
-				<f:if condition="{cache.dynamicKpi}">
-					<ul>
-						<f:for each="{cache.dynamicKpi}" key="key" as="val">
-							<li>{key}: {val}</li>
-						</f:for>
-					</ul>
-				</f:if>
+				<f:render partial="Stats" arguments="{stats: cache.staticKpi}" />
+				<f:render partial="Stats" arguments="{stats: cache.dynamicKpi}" />
 
 				<f:if condition="{cache.isInAnalyseMode}">
 					<f:then>
