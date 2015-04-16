@@ -12,8 +12,8 @@ use HDNET\CacheCheck\Domain\Model\Cache;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-
 /**
  * Class CacheCheckController
  */
@@ -80,7 +80,7 @@ class CacheCheckController extends ActionController {
 	public function deleteAction(Cache $cache) {
 		$this->getDatabaseConnection()
 			->exec_DELETEquery('tx_cachecheck_domain_model_log', 'cache_name = "' . $cache->getName() . '"');
-		$this->addFlashMessage('This cache "' . $cache->getName() . '" information are removed from log');
+		$this->addFlashMessage('This cache "' . $cache->getName() . '" information is removed from log');
 		$this->redirect('list');
 	}
 
@@ -90,7 +90,8 @@ class CacheCheckController extends ActionController {
 	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
 	 */
 	public function flushAction(Cache $cache) {
-		$cacheManager = new CacheManager();
+		/** @var CacheManager $cacheManager */
+		$cacheManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
 		$cacheObject = $cacheManager->getCache($cache->getName());
 		$cacheObject->flush();
 		$this->addFlashMessage('The cache "' . $cache->getName() . '" was flushed');
