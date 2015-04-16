@@ -2,21 +2,22 @@
 /**
  * Controller of the CacheCheck Module
  *
- * @author Julian Seitz <julian.seitz@hdnet.de
+ * @package CacheCheck\Controller
+ * @author  Julian Seitz
  */
 
 namespace HDNET\CacheCheck\Controller;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
-use HDNET\Hdnet\Controller\AbstractController;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
  * Class CacheCheckController
- *
- * @package HDNET\CacheCheck\Controller
  */
-class CacheCheckController extends AbstractController {
+class CacheCheckController extends ActionController {
 
 	/**
 	 * Cache registry
@@ -77,10 +78,31 @@ class CacheCheckController extends AbstractController {
 	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
 	 */
 	public function deleteAction(Cache $cache) {
-
-		// @todo delete
-
+		$this->getDatabaseConnection()
+			->exec_DELETEquery('tx_cachecheck_domain_model_log', 'cache_name = "' . $cache->getName() . '"');
 		$this->addFlashMessage('This cache "' . $cache->getName() . '" information are removed from log');
 		$this->redirect('list');
+	}
+
+	/**
+	 * Flush the given cache
+	 *
+	 * @param \HDNET\CacheCheck\Domain\Model\Cache $cache
+	 */
+	public function flushAction(Cache $cache) {
+		$cacheManager = new CacheManager();
+		$cacheObject = $cacheManager->getCache($cache->getName());
+		$cacheObject->flush();
+		$this->addFlashMessage('The cache "' . $cache->getName() . '" was flushed');
+		$this->redirect('list');
+	}
+
+	/**
+	 * Get databsae connection
+	 *
+	 * @return DatabaseConnection
+	 */
+	protected function getDatabaseConnection() {
+		return $GLOBALS['TYPO3_DB'];
 	}
 }

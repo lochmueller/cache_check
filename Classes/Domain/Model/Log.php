@@ -1,8 +1,8 @@
 <?php
 /**
- * Log entries
+ * Log entry
  *
- * @package Hdnet
+ * @package CacheCheck\Domain\Model
  * @author  Tim Lochmüller
  */
 
@@ -11,7 +11,7 @@ namespace HDNET\CacheCheck\Domain\Model;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * Log entries
+ * Log entry
  *
  * @author       Tim Lochmüller
  * @db

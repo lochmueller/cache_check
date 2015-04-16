@@ -2,21 +2,22 @@
 /**
  * Class description
  *
- * @author Julian Seitz <julian.seitz@hdnet.de
+ * @package CacheCheck\Service
+ * @author  Julian Seitz
  */
 
 namespace HDNET\CacheCheck\Service;
 
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class CacheRegistry
- *
- * @package HDNET\CacheCheck\Service
  */
-class CacheRegistry implements SingletonInterface {
-	
+class CacheRegistry extends AbstractService {
+
+	/**
+	 * Register cache file
+	 */
 	const FILE_NAME = 'typo3temp/cache_check.txt';
 
 	/**
@@ -52,7 +53,6 @@ class CacheRegistry implements SingletonInterface {
 	function getCurrent() {
 		$activeCaches = unserialize(GeneralUtility::getUrl($this->getFileName()));
 		return !is_array($activeCaches) ? array() : $activeCaches;
-
 	}
 
 	/**
@@ -63,5 +63,4 @@ class CacheRegistry implements SingletonInterface {
 	protected function getFileName() {
 		return GeneralUtility::getFileAbsFileName(self::FILE_NAME);
 	}
-
 }

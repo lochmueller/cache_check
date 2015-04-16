@@ -2,7 +2,7 @@
 /**
  * Cache
  *
- * @package Hdnet
+ * @package CacheCheck\Domain\Model
  * @author  Tim Lochmüller
  */
 
@@ -69,6 +69,8 @@ class Cache {
 	}
 
 	/**
+	 * Get name
+	 *
 	 * @return string
 	 */
 	public function getName() {
@@ -76,6 +78,8 @@ class Cache {
 	}
 
 	/**
+	 * Set name
+	 *
 	 * @param string $name
 	 */
 	public function setName($name) {
@@ -179,5 +183,17 @@ class Cache {
 	public function getDynamicKpi() {
 		return KeyPerformanceIndicator::getInstance()
 			->getDynamic($this);
+	}
+
+	/**
+	 * Get the real backend information
+	 *
+	 * @return string
+	 */
+	public function getRealBackend() {
+		if (trim($this->getOriginalBackend()) !== '') {
+			return $this->getOriginalBackend();
+		}
+		return $this->getBackend();
 	}
 }

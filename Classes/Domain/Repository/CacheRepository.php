@@ -2,7 +2,7 @@
 /**
  * Cache Repository
  *
- * @package Hdnet
+ * @package CacheCheck\Domain\Repository
  * @author  Tim Lochmüller
  */
 

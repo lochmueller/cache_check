@@ -9,7 +9,8 @@
 namespace HDNET\CacheCheck\Service;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
-use TYPO3\CMS\Core\SingletonInterface;
+use HDNET\CacheCheck\Service\Statistics\StatisticsInterface;
+use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -17,7 +18,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @author Tim Lochmüller
  */
-class KeyPerformanceIndicator implements SingletonInterface {
+class KeyPerformanceIndicator extends AbstractService {
 
 	/**
 	 * Get the current instance
@@ -29,48 +30,84 @@ class KeyPerformanceIndicator implements SingletonInterface {
 	}
 
 	/**
+	 * Get static cache information
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return array
+	 * @todo implement in general for all backends
+	 */
+	public function getStatic(Cache $cache) {
+		$backendParts = GeneralUtility::trimExplode('\\', $cache->getRealBackend(), TRUE);
+		$statsBackend = 'HDNET\\CacheCheck\\Service\\Statistics\\' . $backendParts[sizeof($backendParts) - 1];
+
+		if (!class_exists($statsBackend)) {
+			return FALSE;
+		}
+		/** @var StatisticsInterface $statsBackendObject */
+		$statsBackendObject = GeneralUtility::makeInstance($statsBackend);
+
+		$size = $statsBackendObject->getSize($cache);
+		$entryCount = $statsBackendObject->countEntries($cache);
+		$tagCount = $statsBackendObject->countTags($cache);
+		return array(
+			'cacheEntriesCount'  => $entryCount,
+			'allEntrySizeByte'     => $size,
+			'averageEntrySizeByte' => $entryCount === 0 ? 0 : $size / $entryCount,
+			'differentTagsCount' => $tagCount,
+		);
+	}
+
+	/**
+	 * Get dynamic cache information
+	 *
 	 * @param Cache $cache
 	 *
 	 * @return array
 	 */
-	public function getStatic(Cache $cache) {
+	public function getDynamic(Cache $cache) {
+		$databaseConnection = $this->getDatabaseConnection();
+		$where = 'cache_name = "' . $cache->getName() . '"';
+		$table = 'tx_cachecheck_domain_model_log';
+		if ($databaseConnection->exec_SELECTcountRows('*', $table, $where) <= 0) {
+			return FALSE;
+		}
+
+		$startTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp ASC');
+		$startTime = (int)($startTime['timestamp'] / 1000);
+		$endTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp DESC');
+		$endTime = (int)($endTime['timestamp'] / 1000);
+		$minutes = ($endTime - $startTime) / 60;
+
+		$countHas = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
+		$countGet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
+		$countSet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
 
 		// @todo implement
 
 		$kpi = array(
-			'cacheEntries'     => 0,
-			'averageEntrySize' => 0,
-			'tags'             => '',
+			'startTime'            => date('d.m.Y H:i:s', $startTime),
+			'averageCreateTime'    => 0,
+			'averageSelectionTime' => 0,
+			'averageLivetime'      => 0,
+			'hitRate'              => '',
+			'missRate'             => '',
+			'hasPerMinute'         => $countHas / $minutes,
+			'getPerMinute'         => $countGet / $minutes,
+			'setPerMinute'         => $countSet / $minutes,
+			'endTime'              => date('d.m.Y H:i:s', $endTime),
+			'logTime'              => $minutes . ' minutes',
 		);
 
 		return $kpi;
 	}
 
 	/**
-	 * @param Cache $cache
+	 * Get databsae connection
 	 *
-	 * @return array
+	 * @return DatabaseConnection
 	 */
-	public function getDynamic(Cache $cache) {
-
-		// @todo implement
-
-		return FALSE;
-
-		$kpi = array(
-			'startTime'            => '',
-			'averageCreateTime'    => 0,
-			'averageSelectionTime' => 0,
-			'averageLivetime'      => 0,
-			'hitRate'              => '',
-			'missRate'             => '',
-			'hasPerMinute'         => '',
-			'getPerMinute'         => '',
-			'setPerMinute'         => '',
-			'endTime'              => '',
-			'logTime'              => '',
-		);
-
-		return $kpi;
+	protected function getDatabaseConnection() {
+		return $GLOBALS['TYPO3_DB'];
 	}
 }
