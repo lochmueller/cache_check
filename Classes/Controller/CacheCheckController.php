@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+
 /**
  * Class CacheCheckController
  */
@@ -99,7 +100,7 @@ class CacheCheckController extends ActionController {
 	}
 
 	/**
-	 * Get databsae connection
+	 * Get database connection
 	 *
 	 * @return DatabaseConnection
 	 */
