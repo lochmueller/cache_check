@@ -84,15 +84,14 @@ class KeyPerformanceIndicator extends AbstractService {
 		$countSet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
 
 
-
-
-
 		$kpi = array(
 			'startTime'            => date('d.m.Y H:i:s', $startTime),
-			'averageCreateTime'    => $this->getAverageCreationTime($cache->getName()),
-			'averageSelectionTime' => 0,
-			'averageLivetime'      => 0,# $this->getAverageLiveTime($cache->getName()),
+			'averageCreationTime'  => $this->getAverageCreationTime($cache->getName()) . ' milliseconds',
+			'averageSelectionTime' => $this->getAverageSelectionTime($cache->getName()) . ' milliseconds',
+			'averageLivetime'      => 0,
+			// $this->getAverageLiveTime($cache->getName()),
 			'hitRate'              => '',
+			//
 			'missRate'             => '',
 			'hasPerMinute'         => $countHas / $minutes,
 			'getPerMinute'         => $countGet / $minutes,
@@ -109,6 +108,7 @@ class KeyPerformanceIndicator extends AbstractService {
 	 * gets and calculates difference in timestamp of has and set entries with the request hash
 	 *
 	 * @param $cacheName          string
+	 *
 	 * @return float|bool
 	 */
 	protected function getAverageCreationTime($cacheName) {
@@ -129,6 +129,22 @@ class KeyPerformanceIndicator extends AbstractService {
 			return $result[0];
 		}
 		return NULL;
+	}
+
+	/**
+	 * returns difference in timestamp before and after original BE method is called.
+	 * @param $cacheName
+	 *
+	 * @return int
+	 */
+	protected function getAverageSelectionTime($cacheName) {
+		$databaseConnection = $this->getDatabaseConnection();
+		$query = "SELECT AVG(t_getAfter.timestamp - t_get.timestamp) as selection_time FROM tx_cachecheck_domain_model_log t_get, tx_cachecheck_domain_model_log t_getAfter WHERE t_get.cache_name = '" . $cacheName . "' AND t_get.called_method = 'get' AND t_getAfter.cache_name = '" . $cacheName . "' AND t_getAfter.called_method = 'getAfter' AND t_get.request_hash = t_getAfter.request_hash AND t_get.entry_identifier = t_getAfter.entry_identifier AND t_get.uid < t_getAfter.uid";
+		$result = $databaseConnection->sql_fetch_row($databaseConnection->sql_query($query));
+		if ($result[0]) {
+			return $result[0];
+		}
+		return 0;
 	}
 
 	/**
