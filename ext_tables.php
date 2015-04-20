@@ -9,8 +9,15 @@ if (!defined("TYPO3_MODE")) {
 	die ("Access denied.");
 }
 
+$loader = array(
+	'SmartObjects',
+	'ContextSensitiveHelps',
+	'TypeConverter',
+);
+
+
 // Autoloader
-\HDNET\Autoloader\Loader::extTables('HDNET', 'cache_check');
+\HDNET\Autoloader\Loader::extTables('HDNET', 'cache_check', $loader);
 
 if (TYPO3_MODE === 'BE') {
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule('HDNET.' . $_EXTKEY, 'tools', 'CacheCheck', '', array('CacheCheck' => 'list,start,stop,delete,flush'), array(

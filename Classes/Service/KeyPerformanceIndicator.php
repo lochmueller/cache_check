@@ -51,10 +51,10 @@ class KeyPerformanceIndicator extends AbstractService {
 		$entryCount = $statsBackendObject->countEntries($cache);
 		$tagCount = $statsBackendObject->countTags($cache);
 		return array(
-			'cacheEntriesCount'  => $entryCount,
+			'cacheEntriesCount'    => $entryCount,
 			'allEntrySizeByte'     => $size,
 			'averageEntrySizeByte' => $entryCount === 0 ? 0 : $size / $entryCount,
-			'differentTagsCount' => $tagCount,
+			'differentTagsCount'   => $tagCount,
 		);
 	}
 
@@ -83,13 +83,15 @@ class KeyPerformanceIndicator extends AbstractService {
 		$countGet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
 		$countSet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
 
-		// @todo implement
+
+
+
 
 		$kpi = array(
 			'startTime'            => date('d.m.Y H:i:s', $startTime),
-			'averageCreateTime'    => 0,
+			'averageCreateTime'    => $this->getAverageCreationTime($cache->getName()),
 			'averageSelectionTime' => 0,
-			'averageLivetime'      => 0,
+			'averageLivetime'      => 0,# $this->getAverageLiveTime($cache->getName()),
 			'hitRate'              => '',
 			'missRate'             => '',
 			'hasPerMinute'         => $countHas / $minutes,
@@ -103,7 +105,34 @@ class KeyPerformanceIndicator extends AbstractService {
 	}
 
 	/**
-	 * Get databsae connection
+	 *
+	 * gets and calculates difference in timestamp of has and set entries with the request hash
+	 *
+	 * @param $cacheName          string
+	 * @return float|bool
+	 */
+	protected function getAverageCreationTime($cacheName) {
+		$databaseConnection = $this->getDatabaseConnection();
+		$query = "SELECT AVG(t_set.timestamp - t_has.timestamp) as creation_time FROM tx_cachecheck_domain_model_log t_has, tx_cachecheck_domain_model_log t_set WHERE t_has.cache_name = '" . $cacheName . "' AND t_has.called_method = 'has' AND t_set.cache_name = '" . $cacheName . "' AND t_set.called_method = 'set' AND t_set.entry_size > 0 AND t_has.request_hash = t_set.request_hash AND t_has.entry_identifier = t_set.entry_identifier AND t_has.uid < t_set.uid";
+		$result = $databaseConnection->sql_fetch_row($databaseConnection->sql_query($query));
+		if ($result[0]) {
+			return $result[0];
+		}
+		return NULL;
+	}
+
+	protected function getAverageLiveTime($cacheName) {
+		$databaseConnection = $this->getDatabaseConnection();
+		$query = "SELECT AVG(t_remove.timestamp - t_set.timestamp) as creation_time FROM tx_cachecheck_domain_model_log t_set, tx_cachecheck_domain_model_log t_remove WHERE t_set.cache_name = '" . $cacheName . "' AND t_set.called_method = 'set' AND t_remove.cache_name = '" . $cacheName . "' AND t_remove.called_method = 'remove' AND t_remove.entry_size > 0 AND t_set.entry_identifier = t_remove.entry_identifier AND t_set.uid < t_remove.uid";
+		$result = $databaseConnection->sql_fetch_row($databaseConnection->sql_query($query));
+		if ($result[0]) {
+			return $result[0];
+		}
+		return NULL;
+	}
+
+	/**
+	 * Get database connection
 	 *
 	 * @return DatabaseConnection
 	 */
