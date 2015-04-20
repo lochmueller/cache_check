@@ -141,7 +141,9 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 */
 	public function get($entryIdentifier) {
 		$this->logEntry('get', $entryIdentifier);
-		return $this->originalBackend->get($entryIdentifier);
+		$data = $this->originalBackend->get($entryIdentifier);
+		$this->logEntry('getAfter', $entryIdentifier);
+		return $data;
 	}
 
 	/**
