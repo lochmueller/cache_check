@@ -68,6 +68,8 @@ class Log extends AbstractEntity {
 	protected $entrySize;
 
 	/**
+	 * get timestamp
+	 *
 	 * @return string
 	 */
 	public function getTimestamp() {
@@ -75,6 +77,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * set timestamp
+	 *
 	 * @param string $timestamp
 	 */
 	public function setTimestamp($timestamp) {
@@ -82,6 +86,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * get request hash
+	 *
 	 * @return string
 	 */
 	public function getRequestHash() {
@@ -89,6 +95,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * set request hash
+	 *
 	 * @param string $requestHash
 	 */
 	public function setRequestHash($requestHash) {
@@ -96,6 +104,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * get cache name
+	 *
 	 * @return string
 	 */
 	public function getCacheName() {
@@ -103,6 +113,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * set cache name
+	 *
 	 * @param string $cacheName
 	 */
 	public function setCacheName($cacheName) {
@@ -110,6 +122,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * get called method
+	 *
 	 * @return string
 	 */
 	public function getCalledMethod() {
@@ -117,6 +131,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * set called method
+	 *
 	 * @param string $calledMethod
 	 */
 	public function setCalledMethod($calledMethod) {
@@ -124,6 +140,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * get entry identifier
+	 *
 	 * @return string
 	 */
 	public function getEntryIdentifier() {
@@ -131,6 +149,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * set entry identifier
+	 *
 	 * @param string $entryIdentifier
 	 */
 	public function setEntryIdentifier($entryIdentifier) {
@@ -138,6 +158,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * get entry size
+	 *
 	 * @return string
 	 */
 	public function getEntrySize() {
@@ -145,6 +167,8 @@ class Log extends AbstractEntity {
 	}
 
 	/**
+	 * set entry size
+	 *
 	 * @param string $entrySize
 	 */
 	public function setEntrySize($entrySize) {

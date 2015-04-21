@@ -87,6 +87,8 @@ class Cache {
 	}
 
 	/**
+	 * Get frontend
+	 *
 	 * @return string
 	 */
 	public function getFrontend() {
@@ -94,6 +96,8 @@ class Cache {
 	}
 
 	/**
+	 * Set frontend
+	 *
 	 * @param string $frontend
 	 */
 	public function setFrontend($frontend) {
@@ -101,6 +105,8 @@ class Cache {
 	}
 
 	/**
+	 * Get backend
+	 *
 	 * @return string
 	 */
 	public function getBackend() {
@@ -108,6 +114,8 @@ class Cache {
 	}
 
 	/**
+	 * Set backend
+	 *
 	 * @param string $backend
 	 */
 	public function setBackend($backend) {
@@ -115,6 +123,8 @@ class Cache {
 	}
 
 	/**
+	 * get original backend
+	 *
 	 * @return string
 	 */
 	public function getOriginalBackend() {
@@ -122,6 +132,8 @@ class Cache {
 	}
 
 	/**
+	 * set original backend
+	 *
 	 * @param string $originalBackend
 	 */
 	public function setOriginalBackend($originalBackend) {
@@ -129,6 +141,8 @@ class Cache {
 	}
 
 	/**
+	 * get groups
+	 *
 	 * @return array
 	 */
 	public function getGroups() {
@@ -136,6 +150,8 @@ class Cache {
 	}
 
 	/**
+	 * set groups
+	 *
 	 * @param array $groups
 	 */
 	public function setGroups($groups) {
@@ -143,6 +159,8 @@ class Cache {
 	}
 
 	/**
+	 * get options
+	 *
 	 * @return array
 	 */
 	public function getOptions() {
@@ -150,6 +168,8 @@ class Cache {
 	}
 
 	/**
+	 * set options
+	 *
 	 * @param array $options
 	 */
 	public function setOptions($options) {

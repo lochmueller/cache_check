@@ -2,7 +2,7 @@
 /**
  * Service abstraction
  *
- * @package Hdnet
+ * @package CacheCheck\Service
  * @author  Tim Lochmüller
  */
 

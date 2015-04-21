@@ -2,7 +2,7 @@
 /**
  * KPI calculation
  *
- * @package Hdnet
+ * @package CacheCheck\Service
  * @author  Tim Lochmüller
  */
 
@@ -102,7 +102,6 @@ class KeyPerformanceIndicator extends AbstractService {
 	}
 
 	/**
-	 *
 	 * gets and calculates difference in timestamp of has and set entries with the request hash
 	 *
 	 * @param Cache $cache
@@ -135,6 +134,8 @@ class KeyPerformanceIndicator extends AbstractService {
 	}
 
 	/**
+	 * Get the hit rate
+	 *
 	 * @param Cache $cache
 	 *
 	 * @return float
@@ -149,6 +150,8 @@ class KeyPerformanceIndicator extends AbstractService {
 	}
 
 	/**
+	 * get dynamic values from database
+	 *
 	 * @param array $queryValues
 	 *
 	 * @return string|null

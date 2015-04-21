@@ -1,8 +1,8 @@
 <?php
 /**
- * @todo    General file information
+ * Stats service interface
  *
- * @package Hdnet
+ * @package CacheCheck\Service\Statistics
  * @author  Tim Lochmüller
  */
 
@@ -12,7 +12,7 @@ use HDNET\CacheCheck\Domain\Model\Cache;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
- * @todo   General class information
+ * Stats service interface
  *
  * @author Tim Lochmüller
  */
