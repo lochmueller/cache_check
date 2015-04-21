@@ -88,11 +88,8 @@ class KeyPerformanceIndicator extends AbstractService {
 			'startTime'            => date('d.m.Y H:i:s', $startTime),
 			'averageCreationTime'  => $this->getAverageCreationTime($cache->getName()) . ' milliseconds',
 			'averageSelectionTime' => $this->getAverageSelectionTime($cache->getName()) . ' milliseconds',
-			'averageLivetime'      => 0,
-			// $this->getAverageLiveTime($cache->getName()),
-			'hitRate'              => '',
-			//
-			'missRate'             => '',
+			'hitRate'              => $this->getHitRate($cache->getName()) * 100 . '%',
+			'missRate'             => (1 - $this->getHitRate($cache->getName())) * 100 . '%',
 			'hasPerMinute'         => $countHas / $minutes,
 			'getPerMinute'         => $countGet / $minutes,
 			'setPerMinute'         => $countSet / $minutes,
@@ -118,22 +115,13 @@ class KeyPerformanceIndicator extends AbstractService {
 		if ($result[0]) {
 			return $result[0];
 		}
-		return NULL;
-	}
-
-	protected function getAverageLiveTime($cacheName) {
-		$databaseConnection = $this->getDatabaseConnection();
-		$query = "SELECT AVG(t_remove.timestamp - t_set.timestamp) as creation_time FROM tx_cachecheck_domain_model_log t_set, tx_cachecheck_domain_model_log t_remove WHERE t_set.cache_name = '" . $cacheName . "' AND t_set.called_method = 'set' AND t_remove.cache_name = '" . $cacheName . "' AND t_remove.called_method = 'remove' AND t_remove.entry_size > 0 AND t_set.entry_identifier = t_remove.entry_identifier AND t_set.uid < t_remove.uid";
-		$result = $databaseConnection->sql_fetch_row($databaseConnection->sql_query($query));
-		if ($result[0]) {
-			return $result[0];
-		}
-		return NULL;
+		return 0;
 	}
 
 	/**
 	 * returns difference in timestamp before and after original BE method is called.
-	 * @param $cacheName
+	 *
+	 * @param $cacheName string
 	 *
 	 * @return int
 	 */
@@ -141,6 +129,31 @@ class KeyPerformanceIndicator extends AbstractService {
 		$databaseConnection = $this->getDatabaseConnection();
 		$query = "SELECT AVG(t_getAfter.timestamp - t_get.timestamp) as selection_time FROM tx_cachecheck_domain_model_log t_get, tx_cachecheck_domain_model_log t_getAfter WHERE t_get.cache_name = '" . $cacheName . "' AND t_get.called_method = 'get' AND t_getAfter.cache_name = '" . $cacheName . "' AND t_getAfter.called_method = 'getAfter' AND t_get.request_hash = t_getAfter.request_hash AND t_get.entry_identifier = t_getAfter.entry_identifier AND t_get.uid < t_getAfter.uid";
 		$result = $databaseConnection->sql_fetch_row($databaseConnection->sql_query($query));
+		if ($result[0]) {
+			return $result[0];
+		}
+		return 0;
+	}
+
+	/**
+	 * @param $cacheName string
+	 *
+	 * @return int
+	 */
+	protected function getHitRate($cacheName) {
+		$databaseConnection = $this->getDatabaseConnection();
+
+
+		$query = array(
+			'SELECT'  => 'COUNT(DISTINCT allTrue.uid) / COUNT(DISTINCT hasGetRequireOnce.uid) as hitRate',
+			'FROM'    => "(SELECT uid,request_hash,entry_identifier,called_method FROM tx_cachecheck_domain_model_log WHERE cache_name = '" . $cacheName . "' AND called_method IN ('has', 'get', 'requireOnce')) hasGetRequireOnce, (SELECT uid,request_hash,entry_identifier,called_method FROM tx_cachecheck_domain_model_log WHERE cache_name = '" . $cacheName . "' AND called_method IN ('hasTRUE', 'getTRUE', 'requireOnceTRUE')) allTrue",
+			'WHERE'   => 'hasGetRequireOnce.entry_identifier = allTrue.entry_identifier AND hasGetRequireOnce.request_hash = allTrue.request_hash AND hasGetRequireOnce.uid < allTrue.uid',
+			'GROUPBY' => '',
+			'ORDERBY' => '',
+			'LIMIT'   => '',
+		);
+
+		$result = $databaseConnection->sql_fetch_row($databaseConnection->exec_SELECT_queryArray($query));
 		if ($result[0]) {
 			return $result[0];
 		}

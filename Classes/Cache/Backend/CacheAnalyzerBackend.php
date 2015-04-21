@@ -143,8 +143,12 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 		$this->logEntry('get', $entryIdentifier);
 		$data = $this->originalBackend->get($entryIdentifier);
 		$this->logEntry('getAfter', $entryIdentifier);
+		if ($data !== FALSE) {
+			$this->logEntry('getTRUE', $entryIdentifier);
+		}
 		return $data;
 	}
+
 
 	/**
 	 * Checks if a cache entry with the specified identifier exists.
@@ -155,7 +159,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	 */
 	public function has($entryIdentifier) {
 		$this->logEntry('has', $entryIdentifier);
-		return $this->originalBackend->has($entryIdentifier);
+		$data = $this->originalBackend->has($entryIdentifier);
+		if ($data !== FALSE) {
+			$this->logEntry('hasTRUE', $entryIdentifier);
+		}
+		return $data;
 	}
 
 	/**
@@ -234,7 +242,11 @@ class CacheAnalyzerBackend extends AbstractBackend implements FreezableBackendIn
 	public function requireOnce($entryIdentifier) {
 		if ($this->originalBackend instanceof PhpCapableBackendInterface) {
 			$this->logEntry('requireOnce', $entryIdentifier);
-			return $this->originalBackend->requireOnce($entryIdentifier);
+			$data = $this->originalBackend->requireOnce($entryIdentifier);
+			if ($data !== FALSE) {
+				$this->logEntry('requireOnceTRUE', $entryIdentifier);
+			}
+			return $data;
 		}
 		return FALSE;
 	}
