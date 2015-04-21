@@ -1,8 +1,8 @@
 <?php
 /**
- * @todo    General file information
+ * Stats service for TYPO3 database
  *
- * @package Hdnet
+ * @package CacheCheck\Service\Statistics
  * @author  Tim Lochmüller
  */
 
@@ -12,7 +12,7 @@ use HDNET\CacheCheck\Domain\Model\Cache;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 
 /**
- * @todo   General class information
+ * Stats service for TYPO3 database
  *
  * @author Tim Lochmüller
  */

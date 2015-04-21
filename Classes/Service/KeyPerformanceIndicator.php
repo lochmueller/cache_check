@@ -2,7 +2,7 @@
 /**
  * KPI calculation
  *
- * @package Hdnet
+ * @package CacheCheck\Service
  * @author  Tim Lochmüller
  */
 
@@ -73,14 +73,20 @@ class KeyPerformanceIndicator extends AbstractService {
 			return FALSE;
 		}
 
+		// @todo move to separate class
 		$startTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp ASC');
 		$startTime = (int)($startTime['timestamp'] / 1000);
 		$endTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp DESC');
 		$endTime = (int)($endTime['timestamp'] / 1000);
 		$minutes = ($endTime - $startTime) / 60;
 
+		// @todo move to separate class
 		$countHas = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
+
+		// @todo move to separate class
 		$countGet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
+
+		// @todo move to separate class
 		$countSet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
 
 		$hitRate = $this->getHitRate($cache);
@@ -102,12 +108,12 @@ class KeyPerformanceIndicator extends AbstractService {
 	}
 
 	/**
-	 *
 	 * gets and calculates difference in timestamp of has and set entries with the request hash
 	 *
 	 * @param Cache $cache
 	 *
 	 * @return float
+	 * @todo move to separate class
 	 */
 	protected function getAverageCreationTime(Cache $cache) {
 		$queryValues = array(
@@ -124,6 +130,7 @@ class KeyPerformanceIndicator extends AbstractService {
 	 * @param Cache $cache
 	 *
 	 * @return float
+	 * @todo move to separate class
 	 */
 	protected function getAverageSelectionTime(Cache $cache) {
 		$queryValues = array(
@@ -135,9 +142,12 @@ class KeyPerformanceIndicator extends AbstractService {
 	}
 
 	/**
+	 * Get the hit rate
+	 *
 	 * @param Cache $cache
 	 *
 	 * @return float
+	 * @todo move to separate class
 	 */
 	protected function getHitRate(Cache $cache) {
 		$queryValues = array(
@@ -149,9 +159,12 @@ class KeyPerformanceIndicator extends AbstractService {
 	}
 
 	/**
+	 * get dynamic values from database
+	 *
 	 * @param array $queryValues
 	 *
 	 * @return string|null
+	 * @todo move to separate class abstraction
 	 */
 	protected function getDynamicFromDatabase(array $queryValues) {
 		$databaseConnection = $this->getDatabaseConnection();

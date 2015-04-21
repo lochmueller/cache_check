@@ -2,7 +2,7 @@
 /**
  * Cache utility
  *
- * @package Hdnet
+ * @package CacheCheck\Utility
  * @author  Tim Lochmüller
  */
 

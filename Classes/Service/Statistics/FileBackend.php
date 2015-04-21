@@ -1,8 +1,8 @@
 <?php
 /**
- * @todo    General file information
+ * Stats service for file backend
  *
- * @package Hdnet
+ * @package CacheCheck\Service\Statistics
  * @author  Tim Lochmüller
  */
 
@@ -11,7 +11,7 @@ namespace HDNET\CacheCheck\Service\Statistics;
 use HDNET\CacheCheck\Domain\Model\Cache;
 
 /**
- * @todo   General class information
+ * Stats service for file backend
  *
  * @author Tim Lochmüller
  */
