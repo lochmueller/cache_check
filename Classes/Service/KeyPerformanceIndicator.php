@@ -75,39 +75,20 @@ class KeyPerformanceIndicator extends AbstractService {
 			return FALSE;
 		}
 
-		// @todo move to separate class
-		$startTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp ASC');
-		$startTime = (int)($startTime['timestamp'] / 1000);
-		$endTime = $databaseConnection->exec_SELECTgetSingleRow('timestamp', $table, $where, '', 'timestamp DESC');
-		$endTime = (int)($endTime['timestamp'] / 1000);
-		$minutes = ($endTime - $startTime) / 60;
-
-		// @todo move to separate class
-		$countHas = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
-
-		// @todo move to separate class
-		$countGet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
-
-		// @todo move to separate class
-		$countSet = $databaseConnection->exec_SELECTcountRows('*', $table, $where . ' AND called_method = "has"');
-
-		$kpi = array(
-			'startTime'    => date('d.m.Y H:i:s', $startTime),
-			'hasPerMinute' => $countHas / $minutes,
-			'getPerMinute' => $countGet / $minutes,
-			'setPerMinute' => $countSet / $minutes,
-			'endTime'      => date('d.m.Y H:i:s', $endTime),
-			'logTime'      => $minutes . ' minutes',
-		);
-
-		// new mechanism by class
 		$kpiClasses = array(
+			'StartTime',
+			'EndTime',
+			'LogTime',
 			'AverageCreationTime',
 			'AverageSelectionTime',
 			'HitRate',
 			'MissRate',
+			'HasPerSecond',
+			'GetPerSecond',
+			'SetPerSecond',
 		);
 
+		$kpi = array();
 		foreach ($kpiClasses as $class) {
 			/** @var AnalyzerInterface $kpiObject */
 			$kpiObject = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\Analyzer\\' . $class);

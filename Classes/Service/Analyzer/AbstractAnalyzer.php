@@ -11,6 +11,7 @@ namespace HDNET\CacheCheck\Service\Analyzer;
 use HDNET\CacheCheck\Exception;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Analyzer abstraction
@@ -51,6 +52,17 @@ abstract class AbstractAnalyzer implements AnalyzerInterface, SingletonInterface
 			return new Exception('No single value is found in the SQL Query', 324528943578);
 		}
 		return $result[0];
+	}
+
+	/**
+	 * Get an analyzer
+	 *
+	 * @param string $name
+	 *
+	 * @return AnalyzerInterface
+	 */
+	protected function getAnalyzer($name) {
+		return GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\Analyzer\\' . $name);
 	}
 
 	/**

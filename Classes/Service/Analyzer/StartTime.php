@@ -1,6 +1,6 @@
 <?php
 /**
- * Miss rate
+ * Start time
  *
  * @package CacheCheck\Service\Analyzer
  * @author  Tim Lochmüller
@@ -9,13 +9,14 @@
 namespace HDNET\CacheCheck\Service\Analyzer;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use HDNET\CacheCheck\Exception;
 
 /**
- * Miss rate
+ * Start time
  *
  * @author Tim Lochmüller
  */
-class MissRate extends AbstractAnalyzer {
+class StartTime extends AbstractAnalyzer {
 
 	/**
 	 * Get the given KPI
@@ -26,8 +27,12 @@ class MissRate extends AbstractAnalyzer {
 	 * @throws \HDNET\CacheCheck\Exception
 	 */
 	public function getKpi(Cache $cache) {
-		$hitRate = $this->getAnalyzer('HitRate');
-		return 1 - $hitRate->getKpi($cache);
+		$startTime = $this->getDatabaseConnection()
+			->exec_SELECTgetSingleRow('timestamp', 'tx_cachecheck_domain_model_log', 'cache_name = "' . $cache->getName() . '"', '', 'timestamp ASC');
+		if (!isset($startTime['timestamp'])) {
+			throw new Exception('No start time found', 1236723844);
+		}
+		return (int)($startTime['timestamp'] / 1000);
 	}
 
 	/**
@@ -38,6 +43,6 @@ class MissRate extends AbstractAnalyzer {
 	 * @return string
 	 */
 	public function getFormat($kpi) {
-		return round($kpi * 100, 2) . '%';
+		return date('d.m.Y H:i:s', $kpi);
 	}
 }
