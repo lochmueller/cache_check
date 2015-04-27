@@ -62,7 +62,7 @@ class Typo3DatabaseBackend implements StatisticsInterface {
 	}
 
 	/**
-	 * Get databsae connection
+	 * Get database connection
 	 *
 	 * @return DatabaseConnection
 	 */
