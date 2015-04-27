@@ -82,13 +82,20 @@ class Typo3DatabaseBackend implements StatisticsInterface {
 	}
 
 	/**
-	 * Returns the left lifetime of the cache entry
+	 * Returns the age of found entries in seconds// DOES NOT. RETURNS LEFT LIFETIME
 	 *
 	 * @param Cache $cache
 	 *
-	 * @return int|null
+	 * @return int
 	 */
 	public function getExpires(Cache $cache) {
-		// TODO: Implement getExpires() method.
+		$databaseConnection = $this->getDatabaseConnection();
+		$query = "SELECT AVG(CAST(expires AS SIGNED INTEGER) - UNIX_TIMESTAMP()) as life_time_left FROM cf_" . $cache->getName() . " WHERE expires > UNIX_TIMESTAMP() AND expires < 2145909600";
+		$res = $databaseConnection->sql_query($query);
+		$info = $databaseConnection->sql_fetch_assoc($res);
+		if ($info['life_time_left']) {
+			return (int)$info['life_time_left'];
+		}
+		return 0;
 	}
 }
