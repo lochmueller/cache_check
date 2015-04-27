@@ -9,6 +9,7 @@
 namespace HDNET\CacheCheck\Domain\Repository;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Cache Repository
@@ -55,9 +56,9 @@ class CacheRepository {
 	protected function mapCacheConfigurationIntoModel($cacheName, $configuration) {
 		$cache = new Cache();
 		$cache->setName($cacheName);
-		$cache->setFrontend(isset($configuration['frontend']) ? $configuration['frontend'] : 'TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend');
-		$cache->setBackend(isset($configuration['backend']) ? $configuration['backend'] : 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend');
-		$cache->setOriginalBackend(isset($configuration['originalBackend']) ? $configuration['originalBackend'] : '');
+		$cache->setFrontend(isset($configuration['frontend']) && class_exists($configuration['frontend']) ? $configuration['frontend'] : 'TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend');
+		$cache->setBackend(isset($configuration['backend']) && class_exists($configuration['backend']) ? $configuration['backend'] : 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend');
+		$cache->setOriginalBackend(isset($configuration['originalBackend']) && class_exists($configuration['originalBackend']) ? $configuration['originalBackend'] : '');
 		$cache->setOptions(isset($configuration['options']) ? $configuration['options'] : array());
 		$cache->setGroups(isset($configuration['groups']) ? $configuration['groups'] : array('all'));
 		return $cache;

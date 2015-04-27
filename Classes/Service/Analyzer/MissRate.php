@@ -1,6 +1,6 @@
 <?php
 /**
- * Analyzer of the log
+ * Miss rate
  *
  * @package CacheCheck\Service\Analyzer
  * @author  Tim Lochmüller
@@ -11,11 +11,11 @@ namespace HDNET\CacheCheck\Service\Analyzer;
 use HDNET\CacheCheck\Domain\Model\Cache;
 
 /**
- * Analyzer of the log
+ * Miss rate
  *
  * @author Tim Lochmüller
  */
-interface AnalyzerInterface {
+class MissRate extends AbstractAnalyzer {
 
 	/**
 	 * Get the given KPI
@@ -25,7 +25,10 @@ interface AnalyzerInterface {
 	 * @return mixed
 	 * @throws \HDNET\CacheCheck\Exception
 	 */
-	public function getKpi(Cache $cache);
+	public function getKpi(Cache $cache) {
+		$hitRate = $this->getAnalyzer('HitRate');
+		return 1 - $hitRate->getKpi($cache);
+	}
 
 	/**
 	 * Format the given KPI
@@ -34,5 +37,7 @@ interface AnalyzerInterface {
 	 *
 	 * @return string
 	 */
-	public function getFormat($kpi);
+	public function getFormat($kpi) {
+		return round($kpi * 100, 2) . '%';
+	}
 }

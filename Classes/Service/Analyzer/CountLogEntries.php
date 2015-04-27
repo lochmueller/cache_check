@@ -1,6 +1,6 @@
 <?php
 /**
- * Analyzer of the log
+ * Count log entries
  *
  * @package CacheCheck\Service\Analyzer
  * @author  Tim Lochmüller
@@ -11,11 +11,11 @@ namespace HDNET\CacheCheck\Service\Analyzer;
 use HDNET\CacheCheck\Domain\Model\Cache;
 
 /**
- * Analyzer of the log
+ * Count log entries
  *
  * @author Tim Lochmüller
  */
-interface AnalyzerInterface {
+class CountLogEntries extends AbstractAnalyzer {
 
 	/**
 	 * Get the given KPI
@@ -25,7 +25,11 @@ interface AnalyzerInterface {
 	 * @return mixed
 	 * @throws \HDNET\CacheCheck\Exception
 	 */
-	public function getKpi(Cache $cache);
+	public function getKpi(Cache $cache) {
+		$databaseConnection = $this->getDatabaseConnection();
+		$where = 'cache_name = "' . $cache->getName() . '"';
+		return (int)$databaseConnection->exec_SELECTcountRows('*', 'tx_cachecheck_domain_model_log', $where);
+	}
 
 	/**
 	 * Format the given KPI
@@ -34,5 +38,7 @@ interface AnalyzerInterface {
 	 *
 	 * @return string
 	 */
-	public function getFormat($kpi);
+	public function getFormat($kpi) {
+		return $kpi;
+	}
 }
