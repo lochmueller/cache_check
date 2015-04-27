@@ -105,7 +105,7 @@ class SimpleFileBackend implements StatisticsInterface {
 			$cacheFileTimes[] = time() - filectime($cacheFile);
 		}
 		if ($cacheFileTimes) {
-			return array_sum($cacheFileTimes) / count($cacheFileTimes);
+			return intval(array_sum($cacheFileTimes) / count($cacheFileTimes));
 		}
 		return NULL;
 	}
@@ -118,6 +118,6 @@ class SimpleFileBackend implements StatisticsInterface {
 	 * @return int|null
 	 */
 	public function getExpires(Cache $cache) {
-		// TODO: Implement getExpires() method.
+		return NULL;
 	}
 }
