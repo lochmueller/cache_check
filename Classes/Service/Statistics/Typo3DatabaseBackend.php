@@ -75,7 +75,7 @@ class Typo3DatabaseBackend implements StatisticsInterface {
 	 *
 	 * @param Cache $cache
 	 *
-	 * @return int|null
+	 * @return null
 	 */
 	public function getAge(Cache $cache) {
 		return NULL;
