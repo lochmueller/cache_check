@@ -100,14 +100,13 @@ class SimpleFileBackend implements StatisticsInterface {
 	 */
 	public function getAge(Cache $cache) {
 		$cacheFiles = glob(GeneralUtility::getFileAbsFileName($this->getCacheDirectory($cache) . '*'));
-		$cacheFileTimes = array();
-		foreach ($cacheFiles as $cacheFile) {
-			$cacheFileTimes[] = time() - filectime($cacheFile);
+		if (!$cacheFiles) {
+			return NULL;
 		}
-		if ($cacheFileTimes) {
-			return intval(array_sum($cacheFileTimes) / count($cacheFileTimes));
+		foreach ($cacheFiles as $key => $cacheFile) {
+			$cacheFiles[$key] = time() - filectime($cacheFile);
 		}
-		return NULL;
+		return intval(array_sum($cacheFiles) / count($cacheFiles));
 	}
 
 	/**

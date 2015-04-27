@@ -10,6 +10,7 @@ namespace HDNET\CacheCheck\Service\Statistics;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Cache\Backend\FileBackend as CoreFileBackend;
 
 /**
  * Stats service for file backend
@@ -17,9 +18,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Tim Lochmüller
  */
 class FileBackend extends SimpleFileBackend {
-
-	const EXPIRYTIME_LENGTH = 14;
-	const DATASIZE_DIGITS = 10;
 
 	/**
 	 * Get the number of tags
@@ -41,15 +39,14 @@ class FileBackend extends SimpleFileBackend {
 	 */
 	public function getExpires(Cache $cache) {
 		$cacheFileNames = glob(GeneralUtility::getFileAbsFileName($this->getCacheDirectory($cache) . '*'));
+		if (!$cacheFileNames) {
+			return NULL;
+		}
 		$expireTimes = array();
 		foreach ($cacheFileNames as $cacheFileName) {
-			$index = (int)file_get_contents($cacheFileName, NULL, NULL, (filesize($cacheFileName) - self::DATASIZE_DIGITS), self::DATASIZE_DIGITS);
-			$expiryTime = (int)file_get_contents($cacheFileName, NULL, NULL, $index, self::EXPIRYTIME_LENGTH);
-			$expireTimes[] = $expiryTime;
+			$index = (int)file_get_contents($cacheFileName, NULL, NULL, (filesize($cacheFileName) - CoreFileBackend::DATASIZE_DIGITS), CoreFileBackend::DATASIZE_DIGITS);
+			$expireTimes[] = (int)file_get_contents($cacheFileName, NULL, NULL, $index, CoreFileBackend::EXPIRYTIME_LENGTH);
 		}
-		if ($expireTimes) {
-			return array_sum($expireTimes) / count($expireTimes);
-		}
-		return NULL;
+		return array_sum($expireTimes) / count($expireTimes);
 	}
 }
