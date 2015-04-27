@@ -18,6 +18,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FileBackend extends SimpleFileBackend {
 
+	const EXPIRYTIME_LENGTH = 14;
+	const DATASIZE_DIGITS = 10;
+
 	/**
 	 * Get the number of tags
 	 *
