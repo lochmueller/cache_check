@@ -69,4 +69,26 @@ class Typo3DatabaseBackend implements StatisticsInterface {
 	protected function getDatabaseConnection() {
 		return $GLOBALS['TYPO3_DB'];
 	}
+
+	/**
+	 * Returns the age of found entries in seconds
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return int|null
+	 */
+	public function getAge(Cache $cache) {
+		// TODO: Implement getAge() method.
+	}
+
+	/**
+	 * Returns the left lifetime of the cache entry
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return int|null
+	 */
+	public function getExpires(Cache $cache) {
+		// TODO: Implement getExpires() method.
+	}
 }

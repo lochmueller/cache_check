@@ -44,4 +44,22 @@ interface StatisticsInterface extends SingletonInterface {
 	 * @return float
 	 */
 	public function getSize(Cache $cache);
+
+	/**
+	 * Returns the age of found entries in seconds
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return int|null
+	 */
+	public function getAge(Cache $cache);
+
+	/**
+	 * Returns the left lifetime of the cache entry
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return int|null
+	 */
+	public function getExpires(Cache $cache);
 }
