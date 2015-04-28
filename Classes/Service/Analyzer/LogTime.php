@@ -9,6 +9,7 @@
 namespace HDNET\CacheCheck\Service\Analyzer;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Log time
@@ -22,7 +23,7 @@ class LogTime extends AbstractAnalyzer {
 	 *
 	 * @var array
 	 */
-	static $internCache = array();
+	static $internalCache = array();
 
 	/**
 	 * Get the given KPI
@@ -33,13 +34,13 @@ class LogTime extends AbstractAnalyzer {
 	 * @throws \HDNET\CacheCheck\Exception
 	 */
 	public function getKpi(Cache $cache) {
-		if (isset(self::$internCache[$cache->getName()])) {
-			return self::$internCache[$cache->getName()];
+		if (isset(self::$internalCache[$cache->getName()])) {
+			return self::$internalCache[$cache->getName()];
 		}
 		$startTime = $this->getAnalyzer('StartTime');
 		$endTime = $this->getAnalyzer('EndTime');
-		self::$internCache[$cache->getName()] = $endTime->getKpi($cache) - $startTime->getKpi($cache);
-		return self::$internCache[$cache->getName()];
+		self::$internalCache[$cache->getName()] = $endTime->getKpi($cache) - $startTime->getKpi($cache);
+		return self::$internalCache[$cache->getName()];
 	}
 
 	/**
@@ -50,6 +51,7 @@ class LogTime extends AbstractAnalyzer {
 	 * @return string
 	 */
 	public function getFormat($kpi) {
-		return $kpi . ' seconds';
+		$formatService = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\FormatService');
+		return $formatService->formatSeconds($kpi);
 	}
 }
