@@ -51,7 +51,7 @@ class FormatService extends AbstractService {
 		}
 
 		// seconds
-		if ($seconds > 0) {
+		if ($seconds >= 0) {
 			$return[] = $seconds . ' seconds';
 		}
 

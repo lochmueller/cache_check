@@ -47,6 +47,6 @@ class FileBackend extends SimpleFileBackend {
 			$index = (int)file_get_contents($cacheFileName, NULL, NULL, (filesize($cacheFileName) - CoreFileBackend::DATASIZE_DIGITS), CoreFileBackend::DATASIZE_DIGITS);
 			$expireTimes[] = (int)file_get_contents($cacheFileName, NULL, NULL, $index, CoreFileBackend::EXPIRYTIME_LENGTH);
 		}
-		return array_sum($expireTimes) / count($expireTimes);
+		return (int)array_sum($expireTimes) / count($expireTimes);
 	}
 }
