@@ -52,8 +52,8 @@ class KeyPerformanceIndicator extends AbstractService {
 		$entryCount = $statsBackend->countEntries($cache);
 		return array(
 			'cacheEntriesCount'     => $entryCount,
-			'allEntrySizeByte'      => $size,
-			'averageEntrySizeByte'  => $entryCount === 0 ? 0 : $size / $entryCount,
+			'allEntrySizeByte'      => $formatService->formatBytes($size),
+			'averageEntrySizeByte'  => $formatService->formatBytes($entryCount === 0 ? 0 : $size / $entryCount),
 			'differentTagsCount'    => $statsBackend->countTags($cache),
 			'averageAgeOfCache'     => $formatService->formatSeconds($statsBackend->getAge($cache)),
 			'averageExpiresOfCache' => $formatService->formatSeconds($statsBackend->getExpires($cache)),

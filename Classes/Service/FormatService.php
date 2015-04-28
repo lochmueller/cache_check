@@ -7,9 +7,8 @@
 
 namespace HDNET\CacheCheck\Service;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-use TYPO3\CMS\Core\Resource\Utility\BackendUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class FormatService extends AbstractService {
 
@@ -57,8 +56,15 @@ class FormatService extends AbstractService {
 
 		return implode(', ', $return);
 	}
+
+	/**
+	 * Splits the given size value(in bytes) into kilobytes, megabytes, gigabytes etc.
+	 * @param $bytes
+	 *
+	 * @return mixed
+	 */
+	public function formatBytes($bytes) {
+		$viewHelper = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\BytesViewHelper');
+		return $viewHelper->render($bytes);
+	}
 }
-
-// \TYPO3\CMS\Fluid\ViewHelpers\Format\BytesViewHelper::render();
-
-#\TYPO3\CMS\Backend\Utility\BackendUtility::calcAge();
