@@ -9,8 +9,8 @@
 namespace HDNET\CacheCheck\Service\Statistics;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Cache\Backend\FileBackend as CoreFileBackend;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Stats service for file backend

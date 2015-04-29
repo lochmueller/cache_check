@@ -9,7 +9,6 @@ namespace HDNET\CacheCheck\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 class FormatService extends AbstractService {
 
 	const SECOND = 1;
@@ -59,6 +58,7 @@ class FormatService extends AbstractService {
 
 	/**
 	 * Splits the given size value(in bytes) into kilobytes, megabytes, gigabytes etc.
+	 *
 	 * @param $bytes
 	 *
 	 * @return mixed

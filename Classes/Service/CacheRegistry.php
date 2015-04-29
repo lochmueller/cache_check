@@ -10,7 +10,6 @@ namespace HDNET\CacheCheck\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ClassReflection;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class CacheRegistry
@@ -36,7 +35,8 @@ class CacheRegistry extends AbstractService {
 		$manager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
 
 		$classReflection = new ClassReflection(get_class($manager));
-		$this->nonChangeableCaches = array_keys($classReflection->getProperty('caches')->getValue($manager));
+		$this->nonChangeableCaches = array_keys($classReflection->getProperty('caches')
+			->getValue($manager));
 	}
 
 	/**
