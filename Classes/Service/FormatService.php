@@ -2,16 +2,18 @@
 /**
  * Class description
  *
- * @author Julian Seitz <julian.seitz@hdnet.de
+ * @package CacheCheck\Service
+ * @author  Julian Seitz <julian.seitz@hdnet.de
  */
 
 namespace HDNET\CacheCheck\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * Class FormatService
+ */
 class FormatService extends AbstractService {
-
-	const SECOND = 1;
 
 	const MINUTE = 60;
 
