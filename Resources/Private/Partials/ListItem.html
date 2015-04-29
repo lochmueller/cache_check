@@ -13,31 +13,33 @@
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Flush cache
 					</button>
 				</f:form>
-				<f:if condition="{cache.isInAnalyseMode}">
-					<f:then>
-						<f:form action="stop" style="margin-bottom:0px; float: left; margin-right: 5px;">
+				<f:if condition="{cache.isChangeable}">
+					<f:if condition="{cache.isInAnalyseMode}">
+						<f:then>
+							<f:form action="stop" style="margin-bottom:0px; float: left; margin-right: 5px;">
+								<f:form.hidden name="cache" value="{cache}" />
+								<button type="submit" class="btn btn-success" aria-label="Stop">
+									<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop
+								</button>
+							</f:form>
+						</f:then>
+						<f:else>
+							<f:form action="start" style="margin-bottom:0px; float: left; margin-right: 5px;">
+								<f:form.hidden name="cache" value="{cache}" />
+								<button type="submit" class="btn btn-warning" aria-label="Start">
+									<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start
+								</button>
+							</f:form>
+						</f:else>
+					</f:if>
+					<f:if condition="{cache.dynamicKpi}">
+						<f:form action="delete" style="margin-bottom:0px; float: left; margin-right: 5px;">
 							<f:form.hidden name="cache" value="{cache}" />
-							<button type="submit" class="btn btn-success" aria-label="Stop">
-								<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop
+							<button type="submit" class="btn btn-info" aria-label="Delete log">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete log
 							</button>
 						</f:form>
-					</f:then>
-					<f:else>
-						<f:form action="start" style="margin-bottom:0px; float: left; margin-right: 5px;">
-							<f:form.hidden name="cache" value="{cache}" />
-							<button type="submit" class="btn btn-warning" aria-label="Start">
-								<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start
-							</button>
-						</f:form>
-					</f:else>
-				</f:if>
-				<f:if condition="{cache.dynamicKpi}">
-					<f:form action="delete" style="margin-bottom:0px; float: left; margin-right: 5px;">
-						<f:form.hidden name="cache" value="{cache}" />
-						<button type="submit" class="btn btn-info" aria-label="Delete log">
-							<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete log
-						</button>
-					</f:form>
+					</f:if>
 				</f:if>
 			</div>
 		</div>

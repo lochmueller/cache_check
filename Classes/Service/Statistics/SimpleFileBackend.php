@@ -90,4 +90,33 @@ class SimpleFileBackend implements StatisticsInterface {
 		$codeOrData = $cache->getFrontend() === 'TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend' ? 'Code' : 'Data';
 		return 'typo3temp/Cache/' . $codeOrData . '/' . $cache->getName() . '/';
 	}
+
+	/**
+	 * Returns the age of found entries in seconds
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return int|null
+	 */
+	public function getAge(Cache $cache) {
+		$cacheFiles = glob(GeneralUtility::getFileAbsFileName($this->getCacheDirectory($cache) . '*'));
+		if (!$cacheFiles) {
+			return NULL;
+		}
+		foreach ($cacheFiles as $key => $cacheFile) {
+			$cacheFiles[$key] = time() - filectime($cacheFile);
+		}
+		return intval(array_sum($cacheFiles) / count($cacheFiles));
+	}
+
+	/**
+	 * Returns the left lifetime of the cache entry
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return int|null
+	 */
+	public function getExpires(Cache $cache) {
+		return NULL;
+	}
 }

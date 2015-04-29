@@ -9,6 +9,8 @@
 namespace HDNET\CacheCheck\Service\Statistics;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Cache\Backend\FileBackend as CoreFileBackend;
 
 /**
  * Stats service for file backend
@@ -26,5 +28,25 @@ class FileBackend extends SimpleFileBackend {
 	 */
 	public function countTags(Cache $cache) {
 		return 'Not implement yet';
+	}
+
+	/**
+	 * Returns the average left lifetime of the cache entries
+	 *
+	 * @param Cache $cache
+	 *
+	 * @return int|null
+	 */
+	public function getExpires(Cache $cache) {
+		$cacheFileNames = glob(GeneralUtility::getFileAbsFileName($this->getCacheDirectory($cache) . '*'));
+		if (!$cacheFileNames) {
+			return NULL;
+		}
+		$expireTimes = array();
+		foreach ($cacheFileNames as $cacheFileName) {
+			$index = (int)file_get_contents($cacheFileName, NULL, NULL, (filesize($cacheFileName) - CoreFileBackend::DATASIZE_DIGITS), CoreFileBackend::DATASIZE_DIGITS);
+			$expireTimes[] = (int)file_get_contents($cacheFileName, NULL, NULL, $index, CoreFileBackend::EXPIRYTIME_LENGTH);
+		}
+		return (int)array_sum($expireTimes) / count($expireTimes);
 	}
 }

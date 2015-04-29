@@ -38,6 +38,7 @@ class KeyPerformanceIndicator extends AbstractService {
 	 * @return array
 	 */
 	public function getStatic(Cache $cache) {
+		$formatService = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\FormatService');
 		$backendParts = GeneralUtility::trimExplode('\\', $cache->getRealBackend(), TRUE);
 		$className = 'HDNET\\CacheCheck\\Service\\Statistics\\' . $backendParts[sizeof($backendParts) - 1];
 
@@ -49,12 +50,13 @@ class KeyPerformanceIndicator extends AbstractService {
 		$statsBackend = GeneralUtility::makeInstance($className);
 		$size = $statsBackend->getSize($cache);
 		$entryCount = $statsBackend->countEntries($cache);
-
 		return array(
-			'cacheEntriesCount'    => $entryCount,
-			'allEntrySizeByte'     => $size,
-			'averageEntrySizeByte' => $entryCount === 0 ? 0 : $size / $entryCount,
-			'differentTagsCount'   => $statsBackend->countTags($cache),
+			'cacheEntriesCount'     => $entryCount,
+			'allEntrySizeByte'      => $formatService->formatBytes($size),
+			'averageEntrySizeByte'  => $formatService->formatBytes($entryCount === 0 ? 0 : $size / $entryCount),
+			'differentTagsCount'    => $statsBackend->countTags($cache),
+			'averageAgeOfCache'     => $formatService->formatSeconds($statsBackend->getAge($cache)),
+			'averageExpiresOfCache' => $formatService->formatSeconds($statsBackend->getExpires($cache)),
 		);
 	}
 

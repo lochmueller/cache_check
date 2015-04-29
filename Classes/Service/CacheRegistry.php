@@ -9,6 +9,8 @@
 namespace HDNET\CacheCheck\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Reflection\ClassReflection;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class CacheRegistry
@@ -19,6 +21,32 @@ class CacheRegistry extends AbstractService {
 	 * Register cache file
 	 */
 	const FILE_NAME = 'typo3temp/cache_check.txt';
+
+	/**
+	 * Not changeable caches
+	 *
+	 * @var array
+	 */
+	protected $nonChangeableCaches = array();
+
+	/**
+	 * Collect non changeable caches
+	 */
+	public function __construct() {
+		$manager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+
+		$classReflection = new ClassReflection(get_class($manager));
+		$this->nonChangeableCaches = array_keys($classReflection->getProperty('caches')->getValue($manager));
+	}
+
+	/**
+	 * Get the not changeable caches
+	 *
+	 * @return array
+	 */
+	public function getNonChangeableCaches() {
+		return $this->nonChangeableCaches;
+	}
 
 	/**
 	 * Add the given cache to the registry
