@@ -8,24 +8,26 @@
 namespace HDNET\CacheCheck\Service;
 
 
+use HDNET\CacheCheck\Domain\Model\Cache;
+
 class SortService extends AbstractService {
 
 	/**
-	 * First sorting by cache analysis
+	 * First sorting of caches
+	 * TODO: add alphabetical order
 	 *
 	 * @param $a
 	 * @param $b
 	 *
 	 * @return int
 	 */
-	function compareCaches($a, $b) {
-		if ($a->getIsInAnalyseMode AND $b->getIsInAnalyseMode) {
+	function cmp(Cache $a, Cache $b) {
+		$aInt = (int)$a->getIsInAnalyseMode() + (int)$a->getDynamicKpi();
+		$bInt = (int)$b->getIsInAnalyseMode() + (int)$b->getDynamicKpi();
+		if ($aInt == $bInt) {
 			return 0;
 		}
-		if ($a->getIsInAnalyseMode AND !$b->getIsInAnalyseMode) {
-			return 1;
-		}
-		return -1;
+		return ($aInt < $bInt) ? 1 : -1;
 	}
 
 	/**
@@ -36,7 +38,10 @@ class SortService extends AbstractService {
 	 * @return array
 	 */
 	public function sortArray($array) {
-		usort($array, 'compareCaches');
+		usort($array, array(
+			$this,
+			'cmp'
+		));
 		return $array;
 	}
 }
