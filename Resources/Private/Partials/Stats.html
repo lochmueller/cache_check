@@ -1,7 +1,13 @@
 <f:if condition="{stats}">
-	<ul>
-		<f:for each="{stats}" key="key" as="val">
-			<li>{key}: {val}</li>
-		</f:for>
-	</ul>
+	<f:for each="{stats}" key="key" as="val">
+		<tr>
+			<td nowrap="nowrap">
+				{key}
+			</td>
+			<td nowrap="nowrap">
+				{val}
+			</td>
+		</tr>
+	</f:for>
 </f:if>
+

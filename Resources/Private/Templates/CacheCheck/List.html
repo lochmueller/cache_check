@@ -1,7 +1,6 @@
 <f:layout name="Backend" />
 
 <f:section name="content">
-	<f:flashMessages />
 	<f:for each="{caches}" as="cache">
 		<f:render partial="ListItem" arguments="{cache: cache}" />
 	</f:for>

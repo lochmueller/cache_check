@@ -2,23 +2,26 @@
 /**
  * Class description
  *
- * @author Julian Seitz <julian.seitz@hdnet.de
+ * @package HDNET\CacheCheck\Service
+ * @author  Julian Seitz
  */
 
 namespace HDNET\CacheCheck\Service;
 
-
 use HDNET\CacheCheck\Domain\Model\Cache;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
+/**
+ * Class SortService
+ *
+ */
 class SortService extends AbstractService {
 
 	/**
 	 * First sorting of caches
-	 * TODO: add alphabetical order
 	 *
-	 * @param $a
-	 * @param $b
+	 * @param Cache $a
+	 * @param Cache $b
 	 *
 	 * @return int
 	 */
