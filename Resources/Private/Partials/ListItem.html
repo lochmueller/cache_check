@@ -3,7 +3,7 @@
 <f:form action="flush" style="margin-bottom:0px; float: left; margin-right: 5px;">
 	<f:form.hidden name="cache" value="{cache}" />
 	<button type="submit" class="btn btn-warning" aria-label="Delete log">
-		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Flush cache
+		<f:be.buttons.icon icon="actions-system-cache-clear-impact-high" title="Flush cache" /> Flush cache
 	</button>
 </f:form>
 <f:if condition="{cache.isChangeable}">
@@ -12,7 +12,7 @@
 			<f:form action="stop" style="margin-bottom:0px; float: left; margin-right: 5px;">
 				<f:form.hidden name="cache" value="{cache}" />
 				<button type="submit" class="btn btn-success" aria-label="Stop">
-					<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop
+					<f:be.buttons.icon icon="actions-edit-hide" title="Stop" /> Stop
 				</button>
 			</f:form>
 		</f:then>
@@ -20,7 +20,7 @@
 			<f:form action="start" style="margin-bottom:0px; float: left; margin-right: 5px;">
 				<f:form.hidden name="cache" value="{cache}" />
 				<button type="submit" class="btn btn-warning" aria-label="Start">
-					<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start
+					<f:be.buttons.icon icon="actions-edit-unhide" title="Start" /> Start
 				</button>
 			</f:form>
 		</f:else>
@@ -29,7 +29,7 @@
 		<f:form action="delete" style="margin-bottom:0px; float: left; margin-right: 5px;">
 			<f:form.hidden name="cache" value="{cache}" />
 			<button type="submit" class="btn btn-info" aria-label="Delete log">
-				<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete log
+				<f:be.buttons.icon icon="actions-edit-delete" title="Delete log" /> Delete log
 			</button>
 		</f:form>
 	</f:if>
