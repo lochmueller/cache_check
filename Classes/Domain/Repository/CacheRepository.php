@@ -9,6 +9,7 @@
 namespace HDNET\CacheCheck\Domain\Repository;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use HDNET\CacheCheck\Service\SortService;
 
 /**
  * Cache Repository
@@ -23,11 +24,12 @@ class CacheRepository {
 	 * @return array
 	 */
 	public function findAll() {
+		$sortService = new SortService();
 		$caches = array();
 		foreach ($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'] as $name => $configuration) {
 			$caches[] = $this->mapCacheConfigurationIntoModel($name, $configuration);
 		}
-		return $caches;
+		return $sortService->sortArray($caches);
 	}
 
 	/**
