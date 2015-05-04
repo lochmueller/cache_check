@@ -197,13 +197,19 @@ class Cache {
 	}
 
 	/**
-	 * get dynamic KPI
+	 * get dynamic KPI and cache the output in a runtime cache to speed
+	 * up the sorting of the caches in the SortService
 	 *
 	 * @return array
 	 */
 	public function getDynamicKpi() {
-		return KeyPerformanceIndicator::getInstance()
+		static $dynamicCache = array();
+		if ($dynamicCache[$this->getName()]) {
+			return $dynamicCache[$this->getName()];
+		}
+		$dynamicCache[$this->getName()] = KeyPerformanceIndicator::getInstance()
 			->getDynamic($this);
+		return $dynamicCache[$this->getName()];
 	}
 
 	/**
