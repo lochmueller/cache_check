@@ -9,6 +9,7 @@ namespace HDNET\CacheCheck\Service;
 
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 class SortService extends AbstractService {
 
@@ -22,12 +23,17 @@ class SortService extends AbstractService {
 	 * @return int
 	 */
 	function cmp(Cache $a, Cache $b) {
-		$aInt = (int)$a->getIsInAnalyseMode() + (int)$a->getDynamicKpi();
-		$bInt = (int)$b->getIsInAnalyseMode() + (int)$b->getDynamicKpi();
-		if ($aInt == $bInt) {
-			return 0;
+		// current in analyse mode
+		if ($a->getIsInAnalyseMode() !== $b->getIsInAnalyseMode()) {
+			return $a->getIsInAnalyseMode() ? -1 : 1;
 		}
-		return ($aInt < $bInt) ? 1 : -1;
+
+		// check if the item has Dynamic information
+		if ((bool)$a->getDynamicKpi() !== (bool)$b->getDynamicKpi()) {
+			return (bool)$a->getDynamicKpi() ? -1 : 1;
+		}
+
+		return MathUtility::forceIntegerInRange(strcmp($a->getName(), $b->getName()), -1, 1, 0);
 	}
 
 	/**
