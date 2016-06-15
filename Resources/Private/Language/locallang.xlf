@@ -3,7 +3,7 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2016-06-15T07:15:51+00:00" product-name="cache_check">
 		<header/>
 		<body>
-			<trans-unit id="tx_cachecheck_domain_model_log"><source><![CDATA[cache_check ==> LLL:tx_cachecheck_domain_model_log]]></source></trans-unit>
+			<trans-unit id="tx_cachecheck_domain_model_log"><source><![CDATA[Cache Check Log]]></source></trans-unit>
 			<trans-unit id="tx_cachecheck_domain_model_log.entry_size"><source>entry_size</source></trans-unit>
 			<trans-unit id="tx_cachecheck_domain_model_log.entry_identifier"><source>entry_identifier</source></trans-unit>
 			<trans-unit id="tx_cachecheck_domain_model_log.called_method"><source>called_method</source></trans-unit>
