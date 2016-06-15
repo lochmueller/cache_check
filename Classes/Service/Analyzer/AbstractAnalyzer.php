@@ -31,14 +31,14 @@ abstract class AbstractAnalyzer implements AnalyzerInterface, SingletonInterface
     protected function getDynamicFromDatabase(array $queryValues)
     {
         $databaseConnection = $this->getDatabaseConnection();
-        $checkValues = array(
+        $checkValues = [
             'SELECT',
             'FROM',
             'WHERE',
             'GROUPBY',
             'ORDERBY',
             'LIMIT'
-        );
+        ];
         foreach ($checkValues as $name) {
             if (!array_key_exists($name, $queryValues)) {
                 $queryValues[$name] = '';

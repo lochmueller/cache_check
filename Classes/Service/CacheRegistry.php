@@ -27,7 +27,7 @@ class CacheRegistry extends AbstractService
      *
      * @var array
      */
-    protected $nonChangeableCaches = array();
+    protected $nonChangeableCaches = [];
 
     /**
      * Collect non changeable caches
@@ -86,7 +86,7 @@ class CacheRegistry extends AbstractService
     function getCurrent()
     {
         $activeCaches = unserialize(GeneralUtility::getUrl($this->getFileName()));
-        return !is_array($activeCaches) ? array() : $activeCaches;
+        return !is_array($activeCaches) ? [] : $activeCaches;
     }
 
     /**

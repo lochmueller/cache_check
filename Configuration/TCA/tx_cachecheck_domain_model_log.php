@@ -6,6 +6,6 @@
 
 $base = \HDNET\Autoloader\Utility\ModelUtility::getTcaInformation('HDNET\\CacheCheck\\Domain\\Model\\Log');
 
-$custom = array();
+$custom = [];
 
 return \HDNET\Autoloader\Utility\ArrayUtility::mergeRecursiveDistinct($base, $custom);

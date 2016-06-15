@@ -27,11 +27,11 @@ class AverageCreationTime extends AbstractAnalyzer
      */
     public function getKpi(Cache $cache)
     {
-        $queryValues = array(
+        $queryValues = [
             'SELECT' => 'AVG(t_set.timestamp - t_has.timestamp) as creation_time',
             'FROM'   => 'tx_cachecheck_domain_model_log t_has, tx_cachecheck_domain_model_log t_set',
             'WHERE'  => "t_has.cache_name = '" . $cache->getName() . "' AND t_has.called_method = 'has' AND t_set.cache_name = '" . $cache->getName() . "' AND t_set.called_method = 'set' AND t_set.entry_size > 0 AND t_has.request_hash = t_set.request_hash AND t_has.entry_identifier = t_set.entry_identifier AND t_has.uid < t_set.uid",
-        );
+        ];
         return (float)$this->getDynamicFromDatabase($queryValues);
     }
 

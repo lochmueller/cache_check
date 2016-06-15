@@ -9,11 +9,11 @@ if (!defined("TYPO3_MODE")) {
     die("Access denied.");
 }
 
-$loader = array(
+$loader = [
     'SmartObjects',
     'ContextSensitiveHelps',
     'TypeConverter',
-);
+];
 
 
 // Autoloader

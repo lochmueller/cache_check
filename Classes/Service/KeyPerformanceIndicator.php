@@ -53,14 +53,14 @@ class KeyPerformanceIndicator extends AbstractService
         $statsBackend = GeneralUtility::makeInstance($className);
         $size = $statsBackend->getSize($cache);
         $entryCount = $statsBackend->countEntries($cache);
-        return array(
+        return [
             'cacheEntriesCount'     => $entryCount,
             'allEntrySizeByte'      => $formatService->formatBytes($size),
             'averageEntrySizeByte'  => $formatService->formatBytes($entryCount === 0 ? 0 : $size / $entryCount),
             'differentTagsCount'    => $statsBackend->countTags($cache),
             'averageAgeOfCache'     => $formatService->formatSeconds($statsBackend->getAge($cache)),
             'averageExpiresOfCache' => $formatService->formatSeconds($statsBackend->getExpires($cache)),
-        );
+        ];
     }
 
     /**
@@ -72,7 +72,7 @@ class KeyPerformanceIndicator extends AbstractService
      */
     public function getDynamic(Cache $cache)
     {
-        $kpiClasses = array(
+        $kpiClasses = [
             'CountLogEntries',
             'StartTime',
             'EndTime',
@@ -84,9 +84,9 @@ class KeyPerformanceIndicator extends AbstractService
             'HasPerSecond',
             'GetPerSecond',
             'SetPerSecond',
-        );
+        ];
 
-        $kpi = array();
+        $kpi = [];
         foreach ($kpiClasses as $i => $class) {
             /** @var AnalyzerInterface $kpiObject */
             $kpiObject = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\Analyzer\\' . $class);

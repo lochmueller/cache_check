@@ -28,11 +28,11 @@ class AverageSelectionTime extends AbstractAnalyzer
      */
     public function getKpi(Cache $cache)
     {
-        $queryValues = array(
+        $queryValues = [
             'SELECT' => 'AVG(t_getAfter.timestamp - t_get.timestamp) as selection_time',
             'FROM'   => 'tx_cachecheck_domain_model_log t_get, tx_cachecheck_domain_model_log t_getAfter',
             'WHERE'  => "t_get.cache_name = '" . $cache->getName() . "' AND t_get.called_method = 'get' AND t_getAfter.cache_name = '" . $cache->getName() . "' AND t_getAfter.called_method = 'getAfter' AND t_get.request_hash = t_getAfter.request_hash AND t_get.entry_identifier = t_getAfter.entry_identifier AND t_get.uid < t_getAfter.uid",
-        );
+        ];
         return (float)$this->getDynamicFromDatabase($queryValues);
     }
 

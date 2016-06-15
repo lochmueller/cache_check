@@ -220,7 +220,7 @@ class Cache
      */
     public function getDynamicKpi()
     {
-        static $dynamicCache = array();
+        static $dynamicCache = [];
         if ($dynamicCache[$this->getName()]) {
             return $dynamicCache[$this->getName()];
         }

@@ -44,7 +44,7 @@ abstract class AbstractAnalyzerBackend extends AbstractBackend implements Freeza
      * @param string $context
      * @param array  $options
      */
-    public function __construct($context, array $options = array())
+    public function __construct($context, array $options = [])
     {
         $this->options = $options;
         parent::__construct($context, $options);
@@ -86,14 +86,14 @@ abstract class AbstractAnalyzerBackend extends AbstractBackend implements Freeza
         if ($requestHash === null) {
             $requestHash = uniqid();
         }
-        $fieldsValues = array(
+        $fieldsValues = [
             'timestamp'        => GeneralUtility::milliseconds(),
             'request_hash'     => $requestHash,
             'cache_name'       => $this->cacheIdentifier,
             'called_method'    => $calledMethod,
             'entry_identifier' => $entryIdentifier,
             'entry_size'       => strlen($data),
-        );
+        ];
         $this->getDatabaseConnection()
             ->exec_INSERTquery('tx_cachecheck_domain_model_log', $fieldsValues);
     }

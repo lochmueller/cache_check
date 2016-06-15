@@ -50,10 +50,10 @@ class SortService extends AbstractService
      */
     public function sortArray($array)
     {
-        usort($array, array(
+        usort($array, [
             $this,
             'cmp'
-        ));
+        ]);
         return $array;
     }
 }

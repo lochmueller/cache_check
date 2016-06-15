@@ -36,14 +36,14 @@ class FormatService extends AbstractService
         if (!is_int($seconds)) {
             return 'NaN';
         }
-        $return = array();
+        $return = [];
 
-        $slots = array(
+        $slots = [
             'year'   => self::YEAR,
             'day'    => self::DAY,
             'hour'   => self::HOUR,
             'minute' => self::MINUTE,
-        );
+        ];
         foreach ($slots as $label => $secondSlot) {
             $fullInt = floor($seconds / $secondSlot);
             if ($fullInt > 0) {

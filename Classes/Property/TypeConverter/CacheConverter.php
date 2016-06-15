@@ -8,6 +8,7 @@
 
 namespace HDNET\CacheCheck\Property\TypeConverter;
 
+use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 
 /**
@@ -31,7 +32,7 @@ class CacheConverter extends AbstractTypeConverter
      *
      * @var array<string>
      */
-    protected $sourceTypes = array('string');
+    protected $sourceTypes = ['string'];
 
     /**
      * The target type this converter can convert to.
@@ -67,13 +68,13 @@ class CacheConverter extends AbstractTypeConverter
      * @param mixed                                                             $source
      * @param string                                                            $targetType
      * @param array                                                             $convertedChildProperties
-     * @param \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration
+     * @param PropertyMappingConfigurationInterface $configuration
      *
      * @return mixed|\TYPO3\CMS\Extbase\Error\Error the target type, or an error object if a user-error occurred
      * @throws \TYPO3\CMS\Extbase\Property\Exception\TypeConverterException thrown in case a developer error occurred
      * @api
      */
-    public function convertFrom($source, $targetType, array $convertedChildProperties = array(), \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration = null)
+    public function convertFrom($source, $targetType, array $convertedChildProperties = [], PropertyMappingConfigurationInterface $configuration = null)
     {
         return $this->cacheRepository->findByName($source);
     }

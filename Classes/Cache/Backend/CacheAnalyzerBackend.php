@@ -41,7 +41,7 @@ class CacheAnalyzerBackend extends AbstractAnalyzerBackend implements FreezableB
      * @throws \TYPO3\CMS\Core\Cache\Exception if no cache frontend has been set.
      * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidDataException if the data is not a string
      */
-    public function set($entryIdentifier, $data, array $tags = array(), $lifetime = null)
+    public function set($entryIdentifier, $data, array $tags = [], $lifetime = null)
     {
         $this->logEntry('set', $entryIdentifier, $data);
         $this->originalBackend->set($entryIdentifier, $data, $tags, $lifetime);
@@ -202,6 +202,6 @@ class CacheAnalyzerBackend extends AbstractAnalyzerBackend implements FreezableB
             $this->logEntry('findIdentifiersByTag');
             return $this->originalBackend->findIdentifiersByTag($tag);
         }
-        return array();
+        return [];
     }
 }

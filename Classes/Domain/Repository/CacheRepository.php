@@ -27,7 +27,7 @@ class CacheRepository
     public function findAll()
     {
         $sortService = new SortService();
-        $caches = array();
+        $caches = [];
         foreach ($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'] as $name => $configuration) {
             $caches[] = $this->mapCacheConfigurationIntoModel($name, $configuration);
         }
@@ -64,8 +64,8 @@ class CacheRepository
         $cache->setFrontend(isset($configuration['frontend']) && class_exists($configuration['frontend']) ? $configuration['frontend'] : 'TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend');
         $cache->setBackend(isset($configuration['backend']) && class_exists($configuration['backend']) ? $configuration['backend'] : 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend');
         $cache->setOriginalBackend(isset($configuration['originalBackend']) && class_exists($configuration['originalBackend']) ? $configuration['originalBackend'] : '');
-        $cache->setOptions(isset($configuration['options']) ? $configuration['options'] : array());
-        $cache->setGroups(isset($configuration['groups']) ? $configuration['groups'] : array('all'));
+        $cache->setOptions(isset($configuration['options']) ? $configuration['options'] : []);
+        $cache->setGroups(isset($configuration['groups']) ? $configuration['groups'] : ['all']);
         return $cache;
     }
 }
