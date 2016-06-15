@@ -20,7 +20,7 @@ $loader = [
 \HDNET\Autoloader\Loader::extLocalconf('HDNET', 'cache_check', $loader);
 
 /** @var \HDNET\CacheCheck\Service\CacheRegistry $cacheRegistry */
-$cacheRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\CacheRegistry');
+$cacheRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\HDNET\CacheCheck\Service\CacheRegistry::class);
 foreach ($cacheRegistry->getCurrent() as $cacheName) {
     \HDNET\CacheCheck\Utility\CacheUtility::enableCheck($cacheName);
 }

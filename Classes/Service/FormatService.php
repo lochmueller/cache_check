@@ -9,6 +9,7 @@
 namespace HDNET\CacheCheck\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\ViewHelpers\Format\BytesViewHelper;
 
 /**
  * Class FormatService
@@ -69,7 +70,7 @@ class FormatService extends AbstractService
      */
     public function formatBytes($bytes)
     {
-        $viewHelper = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\BytesViewHelper');
+        $viewHelper = GeneralUtility::makeInstance(BytesViewHelper::class);
         return $viewHelper->render($bytes);
     }
 }

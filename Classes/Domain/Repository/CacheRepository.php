@@ -10,6 +10,8 @@ namespace HDNET\CacheCheck\Domain\Repository;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
 use HDNET\CacheCheck\Service\SortService;
+use TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 
 /**
  * Cache Repository
@@ -61,8 +63,8 @@ class CacheRepository
     {
         $cache = new Cache();
         $cache->setName($cacheName);
-        $cache->setFrontend(isset($configuration['frontend']) && class_exists($configuration['frontend']) ? $configuration['frontend'] : 'TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend');
-        $cache->setBackend(isset($configuration['backend']) && class_exists($configuration['backend']) ? $configuration['backend'] : 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend');
+        $cache->setFrontend(isset($configuration['frontend']) && class_exists($configuration['frontend']) ? $configuration['frontend'] : VariableFrontend::class);
+        $cache->setBackend(isset($configuration['backend']) && class_exists($configuration['backend']) ? $configuration['backend'] : Typo3DatabaseBackend::class);
         $cache->setOriginalBackend(isset($configuration['originalBackend']) && class_exists($configuration['originalBackend']) ? $configuration['originalBackend'] : '');
         $cache->setOptions(isset($configuration['options']) ? $configuration['options'] : []);
         $cache->setGroups(isset($configuration['groups']) ? $configuration['groups'] : ['all']);

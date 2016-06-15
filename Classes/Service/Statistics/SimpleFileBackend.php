@@ -9,6 +9,7 @@
 namespace HDNET\CacheCheck\Service\Statistics;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -93,7 +94,7 @@ class SimpleFileBackend implements StatisticsInterface
      */
     protected function getCacheDirectory(Cache $cache)
     {
-        $codeOrData = $cache->getFrontend() === 'TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend' ? 'Code' : 'Data';
+        $codeOrData = $cache->getFrontend() === PhpFrontend::class ? 'Code' : 'Data';
         return 'typo3temp/Cache/' . $codeOrData . '/' . $cache->getName() . '/';
     }
 

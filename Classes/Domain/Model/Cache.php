@@ -8,6 +8,7 @@
 
 namespace HDNET\CacheCheck\Domain\Model;
 
+use HDNET\CacheCheck\Service\CacheRegistry;
 use HDNET\CacheCheck\Service\KeyPerformanceIndicator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -249,7 +250,7 @@ class Cache
      */
     public function getIsChangeable()
     {
-        $cacheRegistry = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\CacheRegistry');
+        $cacheRegistry = GeneralUtility::makeInstance(CacheRegistry::class);
         return !in_array($this->getName(), $cacheRegistry->getNonChangeableCaches());
     }
 }

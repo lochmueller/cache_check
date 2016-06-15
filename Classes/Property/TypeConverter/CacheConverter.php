@@ -8,6 +8,7 @@
 
 namespace HDNET\CacheCheck\Property\TypeConverter;
 
+use HDNET\CacheCheck\Domain\Model\Cache;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 
@@ -39,7 +40,7 @@ class CacheConverter extends AbstractTypeConverter
      *
      * @var string
      */
-    protected $targetType = 'HDNET\\CacheCheck\\Domain\\Model\\Cache';
+    protected $targetType = Cache::class;
 
     /**
      * This implementation always returns TRUE for this method.

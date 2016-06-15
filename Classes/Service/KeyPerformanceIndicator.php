@@ -29,7 +29,7 @@ class KeyPerformanceIndicator extends AbstractService
      */
     public static function getInstance()
     {
-        return GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\KeyPerformanceIndicator');
+        return GeneralUtility::makeInstance(KeyPerformanceIndicator::class);
     }
 
     /**
@@ -41,7 +41,7 @@ class KeyPerformanceIndicator extends AbstractService
      */
     public function getStatic(Cache $cache)
     {
-        $formatService = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\FormatService');
+        $formatService = GeneralUtility::makeInstance(FormatService::class);
         $backendParts = GeneralUtility::trimExplode('\\', $cache->getRealBackend(), true);
         $className = 'HDNET\\CacheCheck\\Service\\Statistics\\' . $backendParts[sizeof($backendParts) - 1];
 

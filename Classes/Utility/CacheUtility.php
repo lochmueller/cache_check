@@ -8,6 +8,9 @@
 
 namespace HDNET\CacheCheck\Utility;
 
+use HDNET\CacheCheck\Cache\Backend\CacheAnalyzerBackend;
+use TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend;
+
 /**
  * Cache utility
  *
@@ -27,9 +30,9 @@ class CacheUtility
     {
         $backend = $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['backend'];
         if (trim($backend) == '' || !class_exists($backend)) {
-            $backend = 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend';
+            $backend = Typo3DatabaseBackend::class;
         }
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['originalBackend'] = $backend;
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['backend'] = 'HDNET\\CacheCheck\\Cache\\Backend\\CacheAnalyzerBackend';
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['backend'] = CacheAnalyzerBackend::class;
     }
 }

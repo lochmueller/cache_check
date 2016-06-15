@@ -9,6 +9,7 @@
 namespace HDNET\CacheCheck\Service\Analyzer;
 
 use HDNET\CacheCheck\Domain\Model\Cache;
+use HDNET\CacheCheck\Service\FormatService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -54,7 +55,7 @@ class LogTime extends AbstractAnalyzer
      */
     public function getFormat($kpi)
     {
-        $formatService = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\FormatService');
+        $formatService = GeneralUtility::makeInstance(FormatService::class);
         return $formatService->formatSeconds($kpi);
     }
 }

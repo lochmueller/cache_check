@@ -56,7 +56,8 @@ class CacheCheckController extends ActionController
             $this->cacheRegistry->add($cache->getName());
             $this->addFlashMessage('This cache "' . $cache->getName() . '" is now being analyzed');
         } else {
-            $this->addFlashMessage('This cache "' . $cache->getName() . '" is already being analyzed', '', AbstractMessage::WARNING);
+            $this->addFlashMessage('This cache "' . $cache->getName() . '" is already being analyzed', '',
+                AbstractMessage::WARNING);
         }
         $this->redirect('list');
     }
@@ -72,7 +73,8 @@ class CacheCheckController extends ActionController
             $this->cacheRegistry->remove($cache->getName());
             $this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed anymore.');
         } else {
-            $this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed', '', AbstractMessage::WARNING);
+            $this->addFlashMessage('This cache "' . $cache->getName() . '" is not being analyzed', '',
+                AbstractMessage::WARNING);
         }
         $this->redirect('list');
     }
@@ -97,8 +99,7 @@ class CacheCheckController extends ActionController
      */
     public function flushAction(Cache $cache)
     {
-        /** @var CacheManager $cacheManager */
-        $cacheManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         $cacheObject = $cacheManager->getCache($cache->getName());
         $cacheObject->flush();
         $this->addFlashMessage('The cache "' . $cache->getName() . '" was flushed');

@@ -1,11 +1,11 @@
 <?php
 
-/**
- * Base TCA generation for the model HDNET\\CacheCheck\\Domain\\Model\\Log
- */
+use HDNET\Autoloader\Utility\ArrayUtility;
+use HDNET\Autoloader\Utility\ModelUtility;
+use HDNET\CacheCheck\Domain\Model\Log;
 
-$base = \HDNET\Autoloader\Utility\ModelUtility::getTcaInformation('HDNET\\CacheCheck\\Domain\\Model\\Log');
+$base = ModelUtility::getTcaInformation(Log::class);
 
 $custom = [];
 
-return \HDNET\Autoloader\Utility\ArrayUtility::mergeRecursiveDistinct($base, $custom);
+return ArrayUtility::mergeRecursiveDistinct($base, $custom);

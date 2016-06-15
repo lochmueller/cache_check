@@ -8,6 +8,7 @@
 
 namespace HDNET\CacheCheck\Cache\Backend;
 
+use HDNET\CacheCheck\Domain\Repository\CacheRepository;
 use TYPO3\CMS\Core\Cache\Backend\AbstractBackend;
 use TYPO3\CMS\Core\Cache\Backend\BackendInterface;
 use TYPO3\CMS\Core\Cache\Backend\FreezableBackendInterface;
@@ -61,8 +62,7 @@ abstract class AbstractAnalyzerBackend extends AbstractBackend implements Freeza
     {
         parent::setCache($cache);
 
-        /** @var \HDNET\CacheCheck\Domain\Repository\CacheRepository $cacheRepository */
-        $cacheRepository = GeneralUtility::makeInstance('HDNET\\CacheCheck\\Domain\\Repository\\CacheRepository');
+        $cacheRepository = GeneralUtility::makeInstance(CacheRepository::class);
         $cacheObject = $cacheRepository->findByName($this->cacheIdentifier);
 
         $backendObjectName = '\\' . ltrim($cacheObject->getOriginalBackend(), '\\');
