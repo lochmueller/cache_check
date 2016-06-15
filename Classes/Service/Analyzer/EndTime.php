@@ -16,22 +16,24 @@ use HDNET\CacheCheck\Exception;
  *
  * @author Tim Lochmüller
  */
-class EndTime extends StartTime {
+class EndTime extends StartTime
+{
 
-	/**
-	 * Get the given KPI
-	 *
-	 * @param Cache $cache
-	 *
-	 * @return mixed
-	 * @throws \HDNET\CacheCheck\Exception
-	 */
-	public function getKpi(Cache $cache) {
-		$startTime = $this->getDatabaseConnection()
-			->exec_SELECTgetSingleRow('timestamp', 'tx_cachecheck_domain_model_log', 'cache_name = "' . $cache->getName() . '"', '', 'timestamp DESC');
-		if (!isset($startTime['timestamp'])) {
-			throw new Exception('No start time found', 1236723844);
-		}
-		return (int)($startTime['timestamp'] / 1000);
-	}
+    /**
+     * Get the given KPI
+     *
+     * @param Cache $cache
+     *
+     * @return mixed
+     * @throws \HDNET\CacheCheck\Exception
+     */
+    public function getKpi(Cache $cache)
+    {
+        $startTime = $this->getDatabaseConnection()
+            ->exec_SELECTgetSingleRow('timestamp', 'tx_cachecheck_domain_model_log', 'cache_name = "' . $cache->getName() . '"', '', 'timestamp DESC');
+        if (!isset($startTime['timestamp'])) {
+            throw new Exception('No start time found', 1236723844);
+        }
+        return (int)($startTime['timestamp'] / 1000);
+    }
 }

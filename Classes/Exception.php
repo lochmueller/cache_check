@@ -13,6 +13,7 @@ namespace HDNET\CacheCheck;
  *
  * @author Tim Lochmüller
  */
-class Exception extends \Exception {
+class Exception extends \Exception
+{
 
 }

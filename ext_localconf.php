@@ -6,13 +6,13 @@
  */
 
 if (!defined("TYPO3_MODE")) {
-	die ("Access denied.");
+    die("Access denied.");
 }
 
 $loader = array(
-	'SmartObjects',
-	'ContextSensitiveHelps',
-	'TypeConverter',
+    'SmartObjects',
+    'ContextSensitiveHelps',
+    'TypeConverter',
 );
 
 
@@ -22,5 +22,5 @@ $loader = array(
 /** @var \HDNET\CacheCheck\Service\CacheRegistry $cacheRegistry */
 $cacheRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('HDNET\\CacheCheck\\Service\\CacheRegistry');
 foreach ($cacheRegistry->getCurrent() as $cacheName) {
-	\HDNET\CacheCheck\Utility\CacheUtility::enableCheck($cacheName);
+    \HDNET\CacheCheck\Utility\CacheUtility::enableCheck($cacheName);
 }

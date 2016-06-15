@@ -15,24 +15,25 @@ use HDNET\CacheCheck\Domain\Model\Cache;
  *
  * @author Tim Lochmüller
  */
-interface AnalyzerInterface {
+interface AnalyzerInterface
+{
 
-	/**
-	 * Get the given KPI
-	 *
-	 * @param Cache $cache
-	 *
-	 * @return mixed
-	 * @throws \HDNET\CacheCheck\Exception
-	 */
-	public function getKpi(Cache $cache);
+    /**
+     * Get the given KPI
+     *
+     * @param Cache $cache
+     *
+     * @return mixed
+     * @throws \HDNET\CacheCheck\Exception
+     */
+    public function getKpi(Cache $cache);
 
-	/**
-	 * Format the given KPI
-	 *
-	 * @param mixed $kpi
-	 *
-	 * @return string
-	 */
-	public function getFormat($kpi);
+    /**
+     * Format the given KPI
+     *
+     * @param mixed $kpi
+     *
+     * @return string
+     */
+    public function getFormat($kpi);
 }
