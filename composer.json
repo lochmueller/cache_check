@@ -1,0 +1,61 @@
+{
+  "name": "lochmueller/cache-check",
+  "type": "typo3-cms-extension",
+  "version": "0.5.0",
+  "description": "Check the caches of the TYPO3 caching framework. Provides functionality to analyze and compare installed caches.",
+  "autoload": {
+    "psr-4": {
+      "HDNET\\CacheCheck\\": "Classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HDNET\\CacheCheck\\Tests\\": "Tests",
+      "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
+    }
+  },
+  "keywords": [
+    "TYPO3 CMS",
+    "Cache",
+    "Check"
+  ],
+  "authors": [
+    {
+      "name": "Tim Lochmüller",
+      "email": "webmaster@fruit-lab.de",
+      "role": "Developer",
+      "homepage": "https://github.com/lochmueller"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "typo3/cms-core": "~6.2.14|>=7.4.0,<8.2",
+    "typo3/cms": "^7.6.0"
+  },
+  "replace": {
+    "cache-check": "self.version",
+    "typo3-ter/cache-check": "self.version"
+  },
+  "homepage": "https://github.com/lochmueller/cache_check",
+  "license": "GPL-2.0+",
+  "support": {
+    "issues": "https://github.com/lochmueller/cache_check/issues"
+  },
+  "require-dev": {
+    "namelesscoder/typo3-repository-client": "1.1.x-dev",
+    "phpunit/phpunit": "~4.8.0"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin"
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web",
+      "Package": {
+        "partOfMinimalUsableSystem": true
+      }
+    }
+  }
+}
