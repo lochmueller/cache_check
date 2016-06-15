@@ -8,9 +8,6 @@
 
 namespace HDNET\CacheCheck\Service;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\ViewHelpers\Format\BytesViewHelper;
-
 /**
  * Class FormatService
  */
@@ -59,18 +56,5 @@ class FormatService extends AbstractService
         }
 
         return implode(', ', $return);
-    }
-
-    /**
-     * Splits the given size value(in bytes) into kilobytes, megabytes, gigabytes etc.
-     *
-     * @param $bytes
-     *
-     * @return mixed
-     */
-    public function formatBytes($bytes)
-    {
-        $viewHelper = GeneralUtility::makeInstance(BytesViewHelper::class);
-        return $viewHelper->render($bytes);
     }
 }
