@@ -26,7 +26,7 @@ class SortService extends AbstractService
      *
      * @return int
      */
-    function cmp(Cache $a, Cache $b)
+    public function cmp(Cache $a, Cache $b)
     {
         // current in analyse mode
         if ($a->getIsInAnalyseMode() !== $b->getIsInAnalyseMode()) {

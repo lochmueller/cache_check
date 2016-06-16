@@ -57,7 +57,7 @@ class CacheRegistry extends AbstractService
      *
      * @param string $cacheName
      */
-    function add($cacheName)
+    public function add($cacheName)
     {
         $entries = $this->getCurrent();
         $entries[] = $cacheName;
@@ -69,7 +69,7 @@ class CacheRegistry extends AbstractService
      *
      * @param string $cacheName
      */
-    function remove($cacheName)
+    public function remove($cacheName)
     {
         $entries = $this->getCurrent();
         $key = array_search($cacheName, $entries);
@@ -84,7 +84,7 @@ class CacheRegistry extends AbstractService
      *
      * @return array
      */
-    function getCurrent()
+    public function getCurrent()
     {
         $activeCaches = unserialize(GeneralUtility::getUrl($this->getFileName()));
         return !is_array($activeCaches) ? [] : $activeCaches;

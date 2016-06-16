@@ -25,7 +25,7 @@ class LogTime extends AbstractAnalyzer
      *
      * @var array
      */
-    static $internalCache = [];
+    protected static $internalCache = [];
 
     /**
      * Get the given KPI
